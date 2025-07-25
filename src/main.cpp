@@ -1,47 +1,73 @@
 #include <Arduino.h>
 
-
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
 #include "Wheel.h"
+#include "Display.h"
+#include "Util.h"
+#include "Debouncer.h"
+#include "Pins.h"
+
+#define DEBUG
 
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+Display display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, DISPLAY_ADDR);
+
+Wheel wheel1(ENC_A, ENC_B, ENC_SW);
+
+Debouncer nextDebouncer(buttonDebounceTime);
+Debouncer lastDebouncer(buttonDebounceTime);
+
+bool nextButtonState;
+bool lastButtonState;
+
+void updateNextLastButtons();
+
 
 void setup()
 {
-
-    Wire.setSDA(18);
-    Wire.setSCL(19);
-    Wire.begin();
-
     SerialUSB.begin(9600);
 
-    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C, true, false)){
-        SerialUSB.println("display startup failed");
-    }
+    // start I2C
+    Wire.setSDA(DISPLAY_SDA);
+    Wire.setSCL(DISPLAY_SCL);
+    Wire.begin();
+
+    // start display
+    display.begin();
+
+    // start encoder wheels
+    wheel1.begin();
+
+    pinMode(LAST_BTN, INPUT_PULLUP);
+    pinMode(NEXT_BTN, INPUT_PULLUP);
 
 
-    display.clearDisplay();
-
-    display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(0,0);
-    display.cp437(true);
-
-    display.print("abcdefghijklmnopqrstuvwxyz");
-
-    display.display();
+    #ifndef DEBUG
+    delay(5000);
+    #endif
 }
 
 
 
 void loop()
 {
+    // update input devices
+    wheel1.update();
+    updateNextLastButtons();
 
+
+    display.clear();
+    display.println(String(wheel1.getRawCommand()));
+    display.println(String(wheel1.getMode()));
+
+    // delay(50);
+}
+
+
+
+
+void updateNextLastButtons()
+{
+    nextButtonState = nextDebouncer.update(!digitalRead(NEXT_BTN), millis());
+    lastButtonState = lastDebouncer.update(!digitalRead(LAST_BTN), millis());
 }

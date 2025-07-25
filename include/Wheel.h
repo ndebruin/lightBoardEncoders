@@ -9,7 +9,7 @@
 
 class Wheel
 {
-public:
+    public:
         Wheel(uint8_t encA, uint8_t encB, uint8_t button)
         : encoder(Encoder(encA, encB)), buttonPin(button), debouncer(encoderButtonDebounceTime) {}
 
@@ -21,7 +21,7 @@ public:
         void update()
         {
             // update our ticks
-            commandTicks = encoder.read();
+            commandTicks = encoder.read() /4;
 
             // coarse / fine logic
             bool debounceState = debouncer.update(!digitalRead(buttonPin), millis());
@@ -47,21 +47,15 @@ public:
         float getRawCommand(){ return (float)commandTicks; };
 
 
-        uint32_t getTargetParamIndex(){return targetParamIndex;};
-        String getTargetName(){return targetName;};
-        uint32_t getTargetCategory(){return targetCategory;};
-        float getTargetValue(){return targetValue;};
+        Parameter getTarget(){ return target; };
 
         // OSC & filter subscription / unsubscription is handled elsewhere
         // we just use the wheel class as a storage location
         
         // Use for changing values when a new parameter is assigned
-        void setTarget(uint32_t index, String name, uint32_t category, float value)
-        {
-            targetParamIndex = index; targetName = name; targetCategory = category; 
-        };
+        void setTarget(Parameter Target){target = Target;};
         // Use for updating stored value when we get an update from Eos
-        void setValue(float value){targetValue = value;};
+        void setValue(float value){target.value = value;};
 
     private:
         // hardware bits
@@ -73,10 +67,7 @@ public:
         bool lastDebounceState;
 
         // eos software bits
-        uint32_t targetParamIndex;
-        String targetName;
-        uint32_t targetCategory;
-        float targetValue;
+        Parameter target;
 
         WheelMode operationMode;
         int32_t commandTicks;
