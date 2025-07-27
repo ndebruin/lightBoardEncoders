@@ -46,6 +46,8 @@ class Wheel
         // doesn't reset the count, should be used for debugging
         float getRawCommand(){ return (float)commandTicks; };
 
+        // check if we actually have something to send
+        bool haveUpdate(){ return abs(commandTicks) > 0; };
 
         Parameter getTarget(){ return target; };
 
