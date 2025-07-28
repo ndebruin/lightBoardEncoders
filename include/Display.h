@@ -29,7 +29,12 @@ class Display
             showDisplayInit();
 
             return true;
-        }
+        };
+
+        void update()
+        {
+
+        };
 
         void showDisplayInit()
         {
@@ -46,21 +51,20 @@ class Display
 
 
             display.display();
-        }
+        };
 
         void clear()
         {
             display.clearDisplay();
             display.setCursor(0,0);
-        }
+        };
 
         void println(String input){
             setTextSettings();
 
             display.println(input);
             display.display();
-        }
-
+        };
 
     private:
         Adafruit_SSD1306 display;
@@ -71,6 +75,6 @@ class Display
             display.setTextSize(1);
             display.setTextColor(SSD1306_WHITE);
             display.cp437(true);
-        }
+        };
 
 };

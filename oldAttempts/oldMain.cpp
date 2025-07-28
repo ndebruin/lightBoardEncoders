@@ -34,19 +34,23 @@ const String HANDSHAKE_QUERY = "ETCOSC?";
 const String HANDSHAKE_REPLY = "OK";
 
 // put all pin defs in a seperate file to simplify hw changes
-#include "pinDefs.h"
+// #include "pinDefs.h"
 
 /*******************************************************************************
   Global Objects & Variables
 ******************************************************************************/
 
 // create lcd object
-LiquidCrystalFast lcd(RS, RW, EN, D4, D5, D6, D7);
+// LiquidCrystalFast lcd(RS, RW, EN, D4, D5, D6, D7);
+LiquidCrystalFast lcd;
 
 // create debounced objects for the type selections
-Bounce intensBtn = Bounce(INTENS_BTN, 10);
-Bounce focusBtn = Bounce(FOCUS_BTN, 10);
-Bounce beamBtn = Bounce(BEAM_BTN, 10);
+// Bounce intensBtn = Bounce(INTENS_BTN, 10);
+// Bounce focusBtn = Bounce(FOCUS_BTN, 10);
+// Bounce beamBtn = Bounce(BEAM_BTN, 10);
+Bounce intensBtn;
+Bounce focusBtn;
+Bounce beamBtn;
 
 void setup()
 {

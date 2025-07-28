@@ -16,7 +16,7 @@ class Wheel
         void begin()
         {
             pinMode(buttonPin, INPUT_PULLUP);
-        }
+        };
 
         void update()
         {
@@ -34,14 +34,15 @@ class Wheel
 
             // help with edge detection
             lastDebounceState = debounceState;
-        }
+        };
 
         // includes count reset, should be used for OSC interactions
         float getCommand()
         {
             encoder.readAndReset(); // reset count to 0 so we're only getting the commands since the last read to get command output
             return getRawCommand();
-        }
+        };
+        
         WheelMode getMode(){return operationMode;};
         // doesn't reset the count, should be used for debugging
         float getRawCommand(){ return (float)commandTicks; };

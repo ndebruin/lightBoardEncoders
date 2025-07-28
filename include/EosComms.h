@@ -16,136 +16,85 @@
 #include "Util.h"
 #include "Wheel.h"
 
-class EosComms
+/*
+    due to weirdness with namespaces we only declare the functions
+    that would be equivalent to public methods in a class
+    in this header file.
+    all the private stuff (being stored in an unnamed namespace)
+    is declared and defined in the source file.
+
+    why are we going through all this effort to use namespaces,
+    rather than just using a class????
+
+    C/C++/Arduino doesn't have the concept of a static class.
+    
+    but the concept of a "static class" makes the most sense 
+    for the functionality of this code,
+    as you're only ever going to have one connection to Eos.
+    
+    having a "static class" is also crucial for some of the functionality
+    of the OSC library, as it doesn't support the C++ std::function and std::bind,
+    meaning that the callbacks for dispatch() and route() 
+    can't be instance methods (methods of an object)
+    as there's no way to pass the context (functionally the "this.") to them.
+    if the OSC library supported the C++ std::function and std::bind,
+    then we could use those to encapsulate the context
+    and wouldn't have to do all this mess.
+    
+    but it doesn't, and i don't want to modify it, so here we are....
+
+    i guess i could also just reimplement the dispatch() and route() functions,
+    but nah.
+*/
+
+namespace EosComms
 {
-    public:
-        EosComms(SLIPEncodedUSBSerial* slipSerial) : slipSerial(slipSerial){}
+//////////////////////////////////////////// Basic Functions ////////////////////////////////////////////
 
-        void begin()
-        {
-            // actually start serial
-            slipSerial->begin(115200);
+    /// @brief This replaces an equivalent class constructor.
+    /// @param SLIPSerial Pointer to a SLIPEncodedUSBSerial object to use for communication to Eos.
+    void initialize(SLIPEncodedUSBSerial* SLIPSerial);
 
-            // This is a hack around an Arduino bug. 
-            // It was taken from the OSC library examples
-            while (!SerialUSB){};
+    /// @brief Performs all initialization of our communication with Eos.
+    /// @attention Is blocking until a Serial connection is made.
+    void begin();
 
-            // this is necessary for reconnecting a device because it needs some time
-            // for the serial port to open, but meanwhile the handshake message was
-            // sent from Eos
-            sendHandshakeReply();
-        };
+    /// @brief Checks for new received messages and handles them.
+    void update();
 
-        void update()
-        {
-            // check if we've received a new message
-            String msg = readMessage();
+//////////////////////////////////////////// Transmission Functions ////////////////////////////////////////////
 
-            // if we actually received something
-            if(msg.length() > 0){
-                // parse it
-                parseOSCMessage(msg);
-            }
-        };
+    /// @brief Issues a subscribe to Eos for a specific Parameter object
+    /// @param param Parameter object (name) to subscribe to updates for.
+    void Subscribe(Parameter param);
 
-        // issues a subscribe to Eos for a specific Parameter object
-        void Subscribe(Parameter param)
-        {
-            OSCMessage sub(String("/eos/subscribe/param/"+param.name).c_str());
-            sub.add(1);
-            sendMessage(sub);
-        }
+    /// @brief Issues an unsubscribe to Eos for a specific Parameter object
+    /// @param param Parameter object (name) to unsubscribe from updates for.
+    void Unsubscribe(Parameter param);
 
-        // issues an unsubscribe to Eos for a specific Parameter object
-        void Unsubscribe(Parameter param)
-        {
-            OSCMessage unsub(String("/eos/subscribe/param/"+param.name).c_str());
-            unsub.add(0);
-            sendMessage(unsub);
-        }
+    /// @brief Sends command data for a given wheel object when called.
+    /// @param wheel The Wheel object you wish to send command data for.
+    void sendWheelData(Wheel* wheel);
 
-        void sendWheelData(Wheel* wheel)
-        {
-            OSCMessage msg;
-            int index = wheel->getTarget().index;
-            if(wheel->getMode() == WheelMode::Fine){
-                msg.setAddress(String("/eos/active/wheel/fine/"+index).c_str());
-            }
-            else{ // coarse - default behavior
-                msg.setAddress(String("/eos/active/wheel/coarse/"+index).c_str());
-            }
-            msg.add(wheel->getCommand());
-            sendMessage(msg);
-        }
+//////////////////////////////////////////// Utility Functions ////////////////////////////////////////////
 
-        bool isConnected(){return connected;};
+    bool isConnected();
 
+//////////////////////////////////////////// Receive Callbacks ////////////////////////////////////////////
 
-    private:
-        SLIPEncodedUSBSerial* slipSerial; // serial object
-        
-        bool connected = false;
-        // integral strings
+    /// @brief Logic for when we receive a ping back from Eos.
+    /// @param msg OSCMessage object which is addressed for our callback.
+    void handlePingResponse(OSCMessage& msg);
 
-        unsigned long lastTimeSent;
-        unsigned long lastTimeReceived;
+    /// @brief Logic for updating selection data when we get an update on channel selection from Eos.
+    /// @param msg OSCMessage object which is addressed for our callback.
+    void handleChannelUpdate(OSCMessage& msg);
 
-        String readMessage()
-        {
-            String curMsg;
-            int size;
+    /// @brief Logic for updating parameter values when we get an update for a parameter from Eos.
+    /// @param msg OSCMessage object which is addressed for our callback.
+    void handleParameterUpdate(OSCMessage& msg, int patternOffset);
 
-            // check if we have gotten any OSC commands/messages from Eos that we need to parse
-            size = slipSerial->available();
-            if(size > 0){
-                // fill the message with all available bytes
-                while(size--)
-                    curMsg += (char)(slipSerial->read());
-            }
-            // if we've gotten a whole packet of data
-            if(slipSerial->endofPacket()){
-                return curMsg;
-            }
-            // return an empty string if we didn't get a full packet
-            return "";
-        }
-
-        void parseOSCMessage(String& msg)
-        {
-            // check to see if this is the handshake string
-            if (msg.indexOf(HANDSHAKE_QUERY) != -1){
-                // handshake string found!
-                sendHandshakeReply();
-                return;
-            }
-
-            OSCMessage oscmsg;
-            oscmsg.fill((uint8_t *)msg.c_str(), (int)msg.length());
-        }
-
-        void sendHandshakeReply()
-        {
-            slipSerial->beginPacket();
-            slipSerial->write((const uint8_t*)HANDSHAKE_REPLY.c_str(), (size_t)HANDSHAKE_REPLY.length());
-            slipSerial->endPacket();
-        }
-
-        void IssueFilters()
-        {
-            // this tells Eos to only send us specific messages
-            OSCMessage filter("/eos/filter/add");
-            filter.add("/eos/out/active/chan"); // active channel details
-            filter.add("/eos/out/active/wheel/*"); // parameters of the channel
-            filter.add("/eos/out/ping"); // ping back messages
-            filter.add("/eos/out/param/*"); // updates on parameter values
-            sendMessage(filter);
-        }
-
-        // sends an OSCMessage object over SLIPSerial
-        void sendMessage(OSCMessage& msg)
-        {
-            slipSerial->beginPacket();
-            msg.send(*slipSerial);
-            slipSerial->endPacket();
-        }
+    /// @brief Logic for updating parameter wheels when we get an update on channel selection from Eos.
+    /// @param msg OSCMessage object which is addressed for our callback.
+    void handleWheelUpdate(OSCMessage& msg, int patternOffset);
 };

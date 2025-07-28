@@ -25,8 +25,6 @@ SLIPEncodedSerial SLIPSerial(Serial);
 
 #define DEBUG
 
-EosComms eosComm(&SLIPSerial);
-
 Display display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, DISPLAY_ADDR);
 
 Wheel wheel1(ENC_A, ENC_B, ENC_SW);
@@ -42,9 +40,13 @@ void updateNextLastButtons();
 
 void setup()
 {
+    // this just gives the namespace a pointer to the actual SLIPserial object. 
+    // we can't put it above with the other constructors bc it's function code.
+    EosComms::initialize(&SLIPSerial); 
+    
     // SerialUSB.begin(9600);
 
-    // start I2C
+    // start I2C for display
     Wire.setSDA(DISPLAY_SDA);
     Wire.setSCL(DISPLAY_SCL);
     Wire.begin();
@@ -61,7 +63,7 @@ void setup()
 
     // start OSC connection
     // this is blocking until it connects so it should be the last thing in setup()
-    eosComm.begin();
+    EosComms::begin();
 }
 
 
@@ -73,11 +75,11 @@ void loop()
     updateNextLastButtons();
 
     // keep connection to Eos updated
-    eosComm.update();
+    EosComms::update();
 
     // if our encoders have updates to send, then send them
     if(wheel1.haveUpdate()){
-        eosComm.sendWheelData(&wheel1);
+        EosComms::sendWheelData(&wheel1);
     }
 
 
