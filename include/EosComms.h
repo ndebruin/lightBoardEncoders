@@ -15,6 +15,7 @@
 #include "Strings.h"
 #include "Util.h"
 #include "Wheel.h"
+#include "DataStorage.h"
 
 /*
     due to weirdness with namespaces we only declare the functions
@@ -45,6 +46,10 @@
 
     i guess i could also just reimplement the dispatch() and route() functions,
     but nah.
+
+    so why not just use a class with all methods and variables tagged as static???
+        it would be annoying for 1, and apparently in modern c++ that's bad practice
+            the arduino framework really isn't modern c++ but may as well just follow it
 */
 
 namespace EosComms
@@ -53,7 +58,7 @@ namespace EosComms
 
     /// @brief This replaces an equivalent class constructor.
     /// @param SLIPSerial Pointer to a SLIPEncodedUSBSerial object to use for communication to Eos.
-    void initialize(SLIPEncodedUSBSerial* SLIPSerial);
+    void initialize(SLIPEncodedUSBSerial* SLIPSerial, DataStorage* Storage);
 
     /// @brief Performs all initialization of our communication with Eos.
     /// @attention Is blocking until a Serial connection is made.
@@ -80,21 +85,25 @@ namespace EosComms
 
     bool isConnected();
 
+    unsigned long getTimeSinceRX();
+
+    String getLastRXMessage();
+
 //////////////////////////////////////////// Receive Callbacks ////////////////////////////////////////////
 
     /// @brief Logic for when we receive a ping back from Eos.
     /// @param msg OSCMessage object which is addressed for our callback.
-    void handlePingResponse(OSCMessage& msg);
+    void handlePingResponse(OSCMessage& msg, int matchedPatternOffset);
 
     /// @brief Logic for updating selection data when we get an update on channel selection from Eos.
     /// @param msg OSCMessage object which is addressed for our callback.
-    void handleChannelUpdate(OSCMessage& msg);
+    void handleChannelUpdate(OSCMessage& msg, int matchedPatternOffset);
 
     /// @brief Logic for updating parameter values when we get an update for a parameter from Eos.
     /// @param msg OSCMessage object which is addressed for our callback.
-    void handleParameterUpdate(OSCMessage& msg, int patternOffset);
+    // void handleParameterUpdate(OSCMessage& msg, int matchedPatternOffset);
 
     /// @brief Logic for updating parameter wheels when we get an update on channel selection from Eos.
     /// @param msg OSCMessage object which is addressed for our callback.
-    void handleWheelUpdate(OSCMessage& msg, int patternOffset);
+    void handleWheelUpdate(OSCMessage& msg, int matchedPatternOffset);
 };

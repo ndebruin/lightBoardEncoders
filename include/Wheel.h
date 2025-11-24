@@ -50,15 +50,10 @@ class Wheel
         // check if we actually have something to send
         bool haveUpdate(){ return abs(commandTicks) > 0; };
 
-        Parameter getTarget(){ return target; };
-
         // OSC & filter subscription / unsubscription is handled elsewhere
-        // we just use the wheel class as a storage location
-        
-        // Use for changing values when a new parameter is assigned
-        void setTarget(Parameter Target){target = Target;};
-        // Use for updating stored value when we get an update from Eos
-        void setValue(float value){target.value = value;};
+        uint32_t getParameterIndex(){ return paramIndex; };
+
+        void setParameterIndex(uint32_t Index){ paramIndex = Index; };
 
     private:
         // hardware bits
@@ -69,8 +64,8 @@ class Wheel
         Debouncer debouncer;
         bool lastDebounceState;
 
-        // eos software bits
-        Parameter target;
+        // index of our wheel parameter
+        uint32_t paramIndex;
 
         WheelMode operationMode;
         int32_t commandTicks;

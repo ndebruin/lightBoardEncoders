@@ -22,8 +22,11 @@ SLIPEncodedSerial SLIPSerial(Serial);
 #include "Debouncer.h"
 #include "Pins.h"
 #include "EosComms.h"
+#include "DataStorage.h"
 
 #define DEBUG
+
+DataStorage storage;
 
 Display display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, DISPLAY_ADDR);
 
@@ -42,7 +45,7 @@ void setup()
 {
     // this just gives the namespace a pointer to the actual SLIPserial object. 
     // we can't put it above with the other constructors bc it's function code.
-    EosComms::initialize(&SLIPSerial); 
+    EosComms::initialize(&SLIPSerial, &storage); 
     
     // SerialUSB.begin(9600);
 
@@ -61,11 +64,14 @@ void setup()
     pinMode(LAST_BTN, INPUT_PULLUP);
     pinMode(NEXT_BTN, INPUT_PULLUP);
 
+    pinMode(LED_BUILTIN, OUTPUT);
+
     // start OSC connection
     // this is blocking until it connects so it should be the last thing in setup()
     EosComms::begin();
 }
 
+unsigned long blinkTimer;
 
 
 void loop()
@@ -82,12 +88,29 @@ void loop()
         EosComms::sendWheelData(&wheel1);
     }
 
+    if(EosComms::isConnected()){
+        display.clear();
+        
+        display.println(String(EosComms::getTimeSinceRX()));
+        display.println(EosComms::getLastRXMessage());
+        // if(storage.getParamCount() > 0){
+        //     display.displayParam(storage.getParam(0));
+        // }
+    }
 
     // display.clear();
     // display.println(String(wheel1.getRawCommand()));
     // display.println(String(wheel1.getMode()));
     
     // delay(50);
+    // if(millis() - blinkTimer > 1000){
+    //     digitalToggle(LED_BUILTIN);
+    //     blinkTimer = millis();
+    // }
+
+    if(EosComms::getTimeSinceRX() > 1000){
+        digitalWrite(LED_BUILTIN, LOW);
+    }
 }
 
 

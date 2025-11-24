@@ -36,6 +36,18 @@ class Display
 
         };
 
+        void displayParam(Parameter param)
+        {
+            setTextSettings();
+
+            display.println(param.index);
+            display.println(param.name);
+            display.println(param.category);
+            display.println(param.name);
+
+            display.display();
+        }
+
         void showDisplayInit()
         {
             setTextSettings();
@@ -65,6 +77,14 @@ class Display
             display.println(input);
             display.display();
         };
+
+        void println(const char* str)
+        {
+            setTextSettings();
+
+            display.println(str);
+            display.display();
+        }
 
     private:
         Adafruit_SSD1306 display;

@@ -11,6 +11,12 @@ plat spot
 /eos/out/active/wheel/12, Beam Fx Ind/Spd [-1](s), 4(i), -1.000(f)
 /eos/out/active/wheel/14, Iris [100](s), 5(i), 100.000(f)
 
+/out/active/wheel/X="Intens [0]",1,0.000
+
+
+/eos/out/active/chan, (s)
+/eos/out/active/wheel/1,   [0](s), 0(i), 0.000(f)
+
 
 Intens: %
 R/G/B/W/A: %

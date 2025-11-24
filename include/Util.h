@@ -6,8 +6,8 @@
 #define encoderButtonDebounceTime 10
 #define buttonDebounceTime 10
 
-#define timeoutPingTime 1000 // 1 second
-#define timeoutDisconnectTime 10000 // 10 seconds
+#define timeoutPingTime 10000 // 10 second
+#define timeoutDisconnectTime 30000 // 30 seconds
 
 enum WheelMode
 {
