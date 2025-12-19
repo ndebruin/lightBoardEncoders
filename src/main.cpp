@@ -38,6 +38,7 @@ Debouncer lastDebouncer(buttonDebounceTime);
 bool nextButtonState;
 bool lastButtonState;
 
+void updateDisplay();
 void updateNextLastButtons();
 
 
@@ -72,6 +73,8 @@ void setup()
 }
 
 unsigned long blinkTimer;
+unsigned long displayTimer;
+unsigned long displayTime = 100; // 10Hz update rate
 
 
 void loop()
@@ -89,13 +92,10 @@ void loop()
     }
 
     if(EosComms::isConnected()){
-        display.clear();
-        
-        display.println(String(EosComms::getTimeSinceRX()));
-        display.println(EosComms::getLastRXMessage());
-        // if(storage.getParamCount() > 0){
-        //     display.displayParam(storage.getParam(0));
-        // }
+        if(millis() - displayTimer > displayTime){
+            updateDisplay();
+            displayTimer = millis();
+        };
     }
 
     // display.clear();
@@ -103,17 +103,24 @@ void loop()
     // display.println(String(wheel1.getMode()));
     
     // delay(50);
-    // if(millis() - blinkTimer > 1000){
-    //     digitalToggle(LED_BUILTIN);
-    //     blinkTimer = millis();
-    // }
-
-    if(EosComms::getTimeSinceRX() > 1000){
-        digitalWrite(LED_BUILTIN, LOW);
+    if(millis() - blinkTimer > 1000){
+        digitalToggle(LED_BUILTIN);
+        blinkTimer = millis();
     }
+
+    // if(EosComms::getTimeSinceRX() > 1000){
+    //     digitalWrite(LED_BUILTIN, LOW);
+    // }
 }
 
-
+void updateDisplay()
+{   
+    display.clear();
+    display.println(EosComms::getLastRXMessage());
+    display.println(storage.getParamCount());
+    display.println(storage.getChannelValue());
+    display.println(storage.getChannelSelection());
+}
 
 
 void updateNextLastButtons()

@@ -3,7 +3,6 @@
 namespace EosComms
 {
 
-    
 //////////////////////////////////////////// PRIVATE ////////////////////////////////////////////
 // private has to come first bc this is a source file and the C++ preprocessor is stupid
     namespace { // this creates a functional equivalent of "private:" in a class
@@ -12,6 +11,7 @@ namespace EosComms
         
         bool connected = false;
         bool sentPing = false;
+        unsigned long pingIterator = 0;
 
         unsigned long lastTimeReceived;
         unsigned long lastTimeSent;
@@ -42,7 +42,9 @@ namespace EosComms
         {
             sentPing = true;
             OSCMessage ping("/eos/ping");
+            ping.add((int32_t)pingIterator);
             sendMessage(ping);
+            pingIterator++;
         }
 
         /// @brief Sends all required filters to Eos in a single OSC Message.
@@ -234,6 +236,14 @@ namespace EosComms
         msg.getString(0, selectionBuffer, 32);
         String selectionString = String(selectionBuffer);
 
+        // this handles the case where an empty string is sent with the message, which signifies the de-selection of all channels
+        // like when you clear the command line it sends this (which is a little goofy but ok) 
+        if(selectionString.equals("")){ 
+            storage->clear();
+            storage->setChannel("", 0.0);
+            return;
+        }
+
         uint valueIndexStart = selectionString.indexOf('[');
         uint valueIndexEnd = selectionString.indexOf(']');
         String selection = selectionString.substring(0,valueIndexStart-1); // -1 includes the seperating space
@@ -304,9 +314,9 @@ namespace EosComms
         // float value = msg.getFloat(2);
 
         // check if the wheel index has already been stored, as Eos sends packets every time the parameter updates
-        if(storage->getParamCount() > (index-1)){
-            // in this case we just care about updating the value
-            storage->setParamValue((index-1), value);
+        int16_t paramIndex = storage->find(paramName);
+        if(paramIndex != -1){
+            storage->setParamValue(paramIndex, value); // in this case we just care about updating the value
             return; // early return so we don't create a new param
         }
 
