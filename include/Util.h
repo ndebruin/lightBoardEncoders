@@ -18,8 +18,8 @@ enum WheelMode
 
 struct Parameter
 {
-    uint32_t index;
+    int32_t index;
     String name;
-    uint32_t category;
+    int32_t category;
     float value;
 };

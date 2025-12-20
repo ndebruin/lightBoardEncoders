@@ -14,7 +14,7 @@ class DataStorage
         {
             channelValue = 0.0;
             channelSelection = "";
-            params.clear();
+            // params.clear();
         }
 
         void setChannel(String ChannelSelection, float ChannelValue)
@@ -23,8 +23,32 @@ class DataStorage
             channelSelection = ChannelSelection;
         }
 
+        void removeParam(int32_t eosIndex)
+        {
+            int index = find(eosIndex);
+            if(index == -1){return;};
+            params.erase(params.begin()+index);
+        }
+
+        void clearFromParam(size_t vectorIndex)
+        {
+            params.erase(params.begin()+vectorIndex, params.end());
+        }
+        
+        // unsure if this works tbh
         void addParam(Parameter param)
         {
+            params.push_back(param);
+        }
+
+        void addParam(int32_t index, String name, int32_t category, float value)
+        {
+            Parameter param;
+            param.index = index;
+            param.name = name;
+            param.category = category;
+            param.value = value;
+            
             params.push_back(param);
         }
 
@@ -38,13 +62,13 @@ class DataStorage
         float getChannelValue(){ return channelValue; };
 
         /// @brief Find a parameter in our storage based on name.
-        /// @param paramName Name to find.
-        /// @return Returns index of parameter if found. Returns -1 otherwise.
-        int find(String paramName)
+        /// @param paramIndex ETC Eos index to find.
+        /// @return Returns vector index of parameter if found. Returns -1 otherwise.
+        int find(int32_t paramIndex)
         {
             // basic iterator that works in O(N) time which is fine
             for(uint i=0; i < params.size(); i++){
-                if(params.at(i).name.equals(paramName)){
+                if(params.at(i).index == paramIndex){
                     return i;
                 }
             }

@@ -66,7 +66,7 @@ namespace EosComms
             
             msg.route("/eos/out/ping",handlePingResponse); // ping responses
             msg.route("/eos/out/active/chan",handleChannelUpdate); // selected channel details
-            msg.route("/eos/out/active/wheel/",handleWheelUpdate); // control parameters of the channel
+            msg.route("/eos/out/active/wheel",handleWheelUpdate); // control parameters of the channel
             // msg.route("/eos/out/param/",handleParameterUpdate); // updates on parameter values
         }
 
@@ -222,7 +222,7 @@ namespace EosComms
     // handles "/eos/out/ping" messages
     void handlePingResponse(OSCMessage& msg, int matchedPatternOffset)
     {
-        digitalWrite(LED_BUILTIN, HIGH);
+        // digitalWrite(LED_BUILTIN, HIGH);
         // this lowkey doesn't have to do anything lol.
         // just have a function for completeness.2
         // noting that we're connected and updating our receive time is handled by prior functions.
@@ -232,33 +232,27 @@ namespace EosComms
     // handles "/eos/out/active/chan" messages
     void handleChannelUpdate(OSCMessage& msg, int matchedPatternOffset)
     {
-        char selectionBuffer[64];
-        msg.getString(0, selectionBuffer, 32);
+        char selectionBuffer[80];
+        msg.getString(0, selectionBuffer, 80);
         String selectionString = String(selectionBuffer);
 
         // this handles the case where an empty string is sent with the message, which signifies the de-selection of all channels
         // like when you clear the command line it sends this (which is a little goofy but ok) 
         if(selectionString.equals("")){ 
             storage->clear();
-            storage->setChannel("", 0.0);
             return;
         }
 
+        // Serial1.println(selectionString);
+
         uint valueIndexStart = selectionString.indexOf('[');
         uint valueIndexEnd = selectionString.indexOf(']');
-        String selection = selectionString.substring(0,valueIndexStart-1); // -1 includes the seperating space
+        String selection = selectionString.substring(0,valueIndexStart-2); // -1 includes the seperating space
         String selectionValue = selectionString.substring(valueIndexStart+1,valueIndexEnd); // +1 as the start index is inclusive
         float value = selectionValue.toFloat();
 
-        /*
-            it is implied (and experimentally proven true)
-            that the message to /eos/out/active/chan
-            // comes before any messages to /eos/out/active/wheel/ *
-            therefore, we clear the channel and param storage
-            when we get a new channel selection
-        */
-        storage->clear();
         storage->setChannel(selection, value);
+        // Serial1.println(selection + "l");
     }
 
     // // handles "/eos/out/param/*" messages
@@ -282,14 +276,27 @@ namespace EosComms
     // handles "/eos/out/active/wheel/*" messages
     void handleWheelUpdate(OSCMessage& msg, int matchedPatternOffset)
     {
+        // msgOSC = msg;
         // pull the wheel index out of the address
         // we can get away with such a small buffer
         // bc the wheel index should be max 2 digits in basically all cases
         char wheelIndexBuffer[4];
-        msg.getAddress(wheelIndexBuffer, matchedPatternOffset, 4);
+        msg.getAddress(wheelIndexBuffer, matchedPatternOffset+1, 4);
         uint32_t index = String(wheelIndexBuffer).toInt();
+             
+        int32_t category = msg.getInt(1);
 
-        uint32_t category = msg.getInt(1);
+        int16_t paramIndex = storage->find(index);
+
+        // if it's a null param, then the category is 0
+        // whether this is a heuristic is unknown
+        if(category == 0){
+            // it being a null param means we need to remove it
+            if(paramIndex != -1){
+                storage->clearFromParam(paramIndex);
+            }
+            return;
+        }
 
         // get the parameter name and the value
         char paramNameBuffer[48];
@@ -313,20 +320,41 @@ namespace EosComms
         float value = stringValue;
         // float value = msg.getFloat(2);
 
-        // check if the wheel index has already been stored, as Eos sends packets every time the parameter updates
-        int16_t paramIndex = storage->find(paramName);
-        if(paramIndex != -1){
+        // Serial1.print(index);
+        // Serial1.print(", ");
+        // Serial1.print(paramName);
+        // Serial1.print(" [");
+        // Serial1.print(stringValue);
+        // Serial1.print("] , ");
+        // Serial1.print(category);
+        // Serial1.print(", ");
+        // Serial1.println(msg.getFloat(2));
+
+
+        
+        // check if the wheel index exists already, create it if not
+        
+
+        // Serial1.print(" ");
+        // Serial1.println(paramIndex);
+
+        // if we don't already have a param at this index
+        if(paramIndex == -1){
+            // add a new parameter to our storage
+            storage->addParam(index, paramName, category, value);
+        }
+        // there is a param at this index but it's not the same as our new one
+        else if(!storage->getParam(paramIndex).name.equals(paramName)){
+            // Serial1.print(index);
+            // Serial1.print("new param name: " + paramName);
+            // Serial1.println(paramIndex);
+            storage->clearFromParam(paramIndex);
+            storage->addParam(index, paramName, category, value);
+        }
+        else{
             storage->setParamValue(paramIndex, value); // in this case we just care about updating the value
-            return; // early return so we don't create a new param
         }
 
-        // create a new parameter object and populate it
-        Parameter newParam;
-        newParam.index = index;
-        newParam.category = category; // this is a documented feature in Eos 2.6.0 and above
-        newParam.name = paramName;
-        newParam.value = value;
-
-        storage->addParam(newParam);
+        return;
     }
 };

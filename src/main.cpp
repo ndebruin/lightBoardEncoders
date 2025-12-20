@@ -50,6 +50,8 @@ void setup()
     
     // SerialUSB.begin(9600);
 
+    Serial1.begin(115200);
+
     // start I2C for display
     Wire.setSDA(DISPLAY_SDA);
     Wire.setSCL(DISPLAY_SCL);
@@ -116,10 +118,17 @@ void loop()
 void updateDisplay()
 {   
     display.clear();
-    display.println(EosComms::getLastRXMessage());
-    display.println(storage.getParamCount());
-    display.println(storage.getChannelValue());
-    display.println(storage.getChannelSelection());
+
+    display.println("Channels: " + String(storage.getChannelSelection()));
+    
+    for(uint i = 0; i<storage.getParamCount(); i++){
+        display.println(String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));
+        // Serial1.println(String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));
+        // Serial1.println(storage.getParamCount());
+    }
+
+
+    display.show();
 }
 
 
