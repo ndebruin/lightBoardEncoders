@@ -148,7 +148,7 @@ namespace EosComms
         // this is necessary for reconnecting a device because it needs some time
         // for the serial port to open, but meanwhile the handshake message was
         // sent from Eos
-        delay(5000);
+        delay(2500);
         sendHandshakeReply();
     };
 
@@ -167,12 +167,6 @@ namespace EosComms
         if(millis() - lastTimeReceived >= timeoutDisconnectTime){
             connected = false;
         }
-
-        // hail mary moment
-        // if(!connected){
-        //     sendHandshakeReply();
-        //     connected = true;
-        // }
 
     };
 
@@ -256,8 +250,6 @@ namespace EosComms
             return;
         }
 
-        // Serial1.println(selectionString);
-
         uint valueIndexStart = selectionString.indexOf('[');
         uint valueIndexEnd = selectionString.indexOf(']');
         String selection = selectionString.substring(0,valueIndexStart-2); // -1 includes the seperating space
@@ -265,7 +257,6 @@ namespace EosComms
         float value = selectionValue.toFloat();
 
         storage->setChannel(selection, value);
-        // Serial1.println(selection + "l");
     }
 
     // // handles "/eos/out/param/*" messages
@@ -330,26 +321,8 @@ namespace EosComms
             that provides the true value (similar to using the data key on the console) as a float argument in the message
             after the category argument.
         */
-        float value = stringValue;
-        // float value = msg.getFloat(2);
-
-        // Serial1.print(index);
-        // Serial1.print(", ");
-        // Serial1.print(paramName);
-        // Serial1.print(" [");
-        // Serial1.print(stringValue);
-        // Serial1.print("] , ");
-        // Serial1.print(category);
-        // Serial1.print(", ");
-        // Serial1.println(msg.getFloat(2));
-
-
-        
-        // check if the wheel index exists already, create it if not
-        
-
-        // Serial1.print(" ");
-        // Serial1.println(paramIndex);
+        // float value = stringValue;
+        float value = msg.getFloat(2);
 
         // if we don't already have a param at this index
         if(paramIndex == -1){

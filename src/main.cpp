@@ -35,9 +35,9 @@ Wheel wheel1(ENC_A, ENC_B, ENC_SW);
 Debouncer nextDebouncer(buttonDebounceTime);
 Debouncer lastDebouncer(buttonDebounceTime);
 
-bool nextButtonState;
-bool lastButtonState;
+bool nextButtonState, lastButtonState, nextButtonPressed, lastButtonPressed = false;
 
+void updateBlink();
 void updateDisplay();
 void updateNextLastButtons();
 
@@ -77,6 +77,7 @@ void setup()
 }
 
 unsigned long blinkTimer;
+unsigned long blinkTime = 1000; // 1Hz blink rate
 unsigned long displayTimer;
 unsigned long displayTime = 100; // 10Hz update rate
 
@@ -94,28 +95,24 @@ void loop()
     if(wheel1.haveUpdate()){
         EosComms::sendWheelData(&wheel1);
     }
-    // Serial1.println(wheel1.getRawCommand());
 
+    // if we're connected, keep blinking and updating our display
     if(EosComms::isConnected()){
+        updateBlink();
         if(millis() - displayTimer > displayTime){
             updateDisplay();
             displayTimer = millis();
         };
     }
 
-    // display.clear();
-    // display.println(String(wheel1.getRawCommand()));
-    // display.println(String(wheel1.getMode()));
-    
-    // delay(50);
-    if(millis() - blinkTimer > 1000){
+}
+
+void updateBlink()
+{
+    if(millis() - blinkTimer > (blinkTime/2)){
         digitalToggle(LED_BUILTIN);
         blinkTimer = millis();
     }
-
-    // if(EosComms::getTimeSinceRX() > 1000){
-    //     digitalWrite(LED_BUILTIN, LOW);
-    // }
 }
 
 void updateDisplay()
@@ -125,9 +122,12 @@ void updateDisplay()
     display.println("Channels: " + String(storage.getChannelSelection()));
     
     for(uint i = 0; i<storage.getParamCount(); i++){
-        display.println(String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));
-        // Serial1.println(String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));
-        // Serial1.println(storage.getParamCount());
+        if(i == wheel1.getParameterIndex()){
+            display.println(" " + String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));    
+        }
+        else{
+            display.println(String(storage.getParam(i).name) + "   " + String(storage.getParam(i).value));
+        }
     }
 
 
@@ -139,4 +139,21 @@ void updateNextLastButtons()
 {
     nextButtonState = nextDebouncer.update(!digitalRead(NEXT_BTN), millis());
     lastButtonState = lastDebouncer.update(!digitalRead(LAST_BTN), millis());
+
+    // handle our next/last param button logic
+    if(nextButtonState && !nextButtonPressed){
+        nextButtonPressed = true;
+        uint32_t currentIndex = wheel1.getParameterIndex();
+        if(currentIndex < storage.getParamCount()-1){ currentIndex++; };
+        wheel1.setParameterIndex(currentIndex);
+    }
+    if(!nextButtonState){ nextButtonPressed = false; };
+
+    if(lastButtonState && !lastButtonPressed){
+        lastButtonPressed = true;
+        uint32_t currentIndex = wheel1.getParameterIndex();
+        if(currentIndex > 0){ currentIndex--; };
+        wheel1.setParameterIndex(currentIndex);
+    }
+    if(!lastButtonState){ lastButtonPressed = false; };
 }
