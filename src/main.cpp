@@ -69,6 +69,8 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
 
+    wheel1.setParameterIndex(0);
+
     // start OSC connection
     // this is blocking until it connects so it should be the last thing in setup()
     EosComms::begin();
@@ -92,6 +94,7 @@ void loop()
     if(wheel1.haveUpdate()){
         EosComms::sendWheelData(&wheel1);
     }
+    // Serial1.println(wheel1.getRawCommand());
 
     if(EosComms::isConnected()){
         if(millis() - displayTimer > displayTime){

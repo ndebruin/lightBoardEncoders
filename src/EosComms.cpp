@@ -22,6 +22,9 @@ namespace EosComms
         /// @brief Sends an OSCMessage object over our SLIPSerial object.
         void sendMessage(OSCMessage& msg)
         {
+            // char buff[80];
+            // msg.getAddress(buff, 0, 80);
+            // Serial1.println(buff);
             slipSerial->beginPacket();
             msg.send(*slipSerial);
             slipSerial->endPacket();
@@ -80,7 +83,7 @@ namespace EosComms
                 sendHandshakeReply();
                 connected = true;
                 // also send our filters so that they are given to Eos
-                IssueFilters();
+                // IssueFilters();
                 return;
             }
 
@@ -197,16 +200,27 @@ namespace EosComms
     /// @param wheel The Wheel object you wish to send command data for.
     void sendWheelData(Wheel* wheel)
     {
+        if(wheel->getParameterIndex() >= storage->getParamCount()){return;};
+        
+        uint32_t index = storage->getParam(wheel->getParameterIndex()).index;
+
         OSCMessage msg;
-        uint32_t index = wheel->getParameterIndex()+1; // Wheels are 1 indexed. thanks ETC!
         if(wheel->getMode() == WheelMode::Fine){
-            msg.setAddress(String("/eos/active/wheel/fine/"+index).c_str());
+            msg.setAddress(String("/eos/active/wheel/fine/").concat(index).c_str());
         }
         else{ // coarse - default behavior
-            msg.setAddress(String("/eos/active/wheel/coarse/"+index).c_str());
+            msg.setAddress(String("/eos/active/wheel/coarse/").concat(index).c_str());
         }
-        msg.add(wheel->getCommand());
-        sendMessage(msg);
+        float val = wheel->getRawCommand();
+        wheel->reset();
+        msg.add(String(val));
+
+        // msg.add((int32_t) 0);
+
+        // sendMessage(msg);
+        slipSerial->beginPacket();
+        msg.send(*slipSerial);
+        slipSerial->endPacket();
     }
 
 //////////////////////////////////////////// Utility Functions ////////////////////////////////////////////

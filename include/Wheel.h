@@ -23,6 +23,10 @@ class Wheel
             // update our ticks
             commandTicks = encoder.read() /4;
 
+            // Serial1.println(String(commandTicks));
+
+            // Serial1.println(String(getCommand()));
+
             // coarse / fine logic
             bool debounceState = debouncer.update(!digitalRead(buttonPin), millis());
             // edge detection if it's actually been pressed
@@ -38,21 +42,24 @@ class Wheel
 
         // includes count reset, should be used for OSC interactions
         float getCommand()
-        {
-            encoder.readAndReset(); // reset count to 0 so we're only getting the commands since the last read to get command output
+        {            
+            // encoder.readAndReset(); // reset count to 0 so we're only getting the commands since the last read to get command output
             return getRawCommand();
         };
+
+        void reset(){ encoder.readAndReset();};
         
         WheelMode getMode(){return operationMode;};
         // doesn't reset the count, should be used for debugging
-        float getRawCommand(){ return (float)commandTicks; };
+        float getRawCommand(){ return (float)(commandTicks/1.0); };
 
         // check if we actually have something to send
         bool haveUpdate(){ return abs(commandTicks) > 0; };
 
-        // OSC & filter subscription / unsubscription is handled elsewhere
+        // get the param index in the data storage
         uint32_t getParameterIndex(){ return paramIndex; };
 
+        // set the param index in the data storage
         void setParameterIndex(uint32_t Index){ paramIndex = Index; };
 
     private:
@@ -64,7 +71,7 @@ class Wheel
         Debouncer debouncer;
         bool lastDebounceState;
 
-        // index of our wheel parameter
+        // index of our wheel parameter in the data storage
         uint32_t paramIndex;
 
         WheelMode operationMode;
