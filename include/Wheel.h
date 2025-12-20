@@ -7,6 +7,12 @@
 #include "Util.h"
 #include "Debouncer.h"
 
+enum WheelMode
+{
+    Coarse = 0,
+    Fine = 1
+};
+
 class Wheel
 {
     public:
@@ -43,8 +49,9 @@ class Wheel
         // includes count reset, should be used for OSC interactions
         float getCommand()
         {            
-            // encoder.readAndReset(); // reset count to 0 so we're only getting the commands since the last read to get command output
-            return getRawCommand();
+            float val = getRawCommand();
+            reset();
+            return val;
         };
 
         void reset(){ encoder.readAndReset();};
@@ -74,6 +81,6 @@ class Wheel
         // index of our wheel parameter in the data storage
         uint32_t paramIndex;
 
-        WheelMode operationMode;
+        WheelMode operationMode = WheelMode::Coarse;
         int32_t commandTicks;
 };

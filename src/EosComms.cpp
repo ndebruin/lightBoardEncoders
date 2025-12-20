@@ -83,7 +83,7 @@ namespace EosComms
                 sendHandshakeReply();
                 connected = true;
                 // also send our filters so that they are given to Eos
-                // IssueFilters();
+                IssueFilters();
                 return;
             }
 
@@ -202,25 +202,24 @@ namespace EosComms
     {
         if(wheel->getParameterIndex() >= storage->getParamCount()){return;};
         
-        uint32_t index = storage->getParam(wheel->getParameterIndex()).index;
+        uint32_t index = storage->getParam(wheel->getParameterIndex()).index;        
+        float val = wheel->getCommand();
 
-        OSCMessage msg;
-        if(wheel->getMode() == WheelMode::Fine){
-            msg.setAddress(String("/eos/active/wheel/fine/").concat(index).c_str());
-        }
-        else{ // coarse - default behavior
-            msg.setAddress(String("/eos/active/wheel/coarse/").concat(index).c_str());
-        }
-        float val = wheel->getRawCommand();
-        wheel->reset();
-        msg.add(String(val));
+        // create the OSC address
+        String addr = "/eos/active/wheel/";
+        // route to either coarse or fine paths
+        if(wheel->getMode() == WheelMode::Coarse){ addr.concat("coarse/"); }
+        else if(wheel->getMode() == WheelMode::Fine){ addr.concat("fine/"); }
 
-        // msg.add((int32_t) 0);
+        // add the eos wheel index
+        addr.concat(index);
 
-        // sendMessage(msg);
-        slipSerial->beginPacket();
-        msg.send(*slipSerial);
-        slipSerial->endPacket();
+        // create the actual OSCMessage object and add our data
+        OSCMessage msg(addr.c_str());
+        msg.add((float)val); // use a float cast on a float variable just to be safe and make sure the overridden add() function uses the correct datatype
+
+        sendMessage(msg); // send it!
+        
     }
 
 //////////////////////////////////////////// Utility Functions ////////////////////////////////////////////

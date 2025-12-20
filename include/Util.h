@@ -9,13 +9,6 @@
 #define timeoutPingTime 10000 // 10 second
 #define timeoutDisconnectTime 30000 // 30 seconds
 
-enum WheelMode
-{
-    Coarse,
-    Fine
-};
-
-
 struct Parameter
 {
     int32_t index;
