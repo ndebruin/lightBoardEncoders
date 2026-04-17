@@ -22,7 +22,7 @@
     that would be equivalent to public methods in a class
     in this header file.
     all the private stuff (being stored in an unnamed namespace)
-    is declared and defined in the source file.
+    is declared and defined only in the source file.
 
     why are we going through all this effort to use namespaces,
     rather than just using a class????
@@ -48,8 +48,8 @@
     but nah.
 
     so why not just use a class with all methods and variables tagged as static???
-        it would be annoying for 1, and apparently in modern c++ that's bad practice
-            the arduino framework really isn't modern c++ but may as well just follow it
+    it would be annoying for one, and apparently in modern c++ that's bad practice
+    the arduino framework really isn't modern c++ but may as well follow best practices
 */
 
 namespace EosComms

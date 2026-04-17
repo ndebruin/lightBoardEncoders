@@ -14,7 +14,6 @@ class DataStorage
         {
             channelValue = 0.0;
             channelSelection = "";
-            // params.clear();
         }
 
         void setChannel(String ChannelSelection, float ChannelValue)

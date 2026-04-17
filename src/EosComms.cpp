@@ -177,7 +177,7 @@ namespace EosComms
     void Subscribe(Parameter param)
     {
         OSCMessage sub(String("/eos/subscribe/param/"+param.name).c_str());
-        sub.add(1);
+        sub.add(1); // magic number to say subscribe to parameter at this path. Top of P6 of "Supported OSC Commands.pdf"
         sendMessage(sub);
     }
 
@@ -186,7 +186,7 @@ namespace EosComms
     void Unsubscribe(Parameter param)
     {
         OSCMessage unsub(String("/eos/subscribe/param/"+param.name).c_str());
-        unsub.add(0);
+        unsub.add(0); // magic number to say un-subscribe to parameter at this path. Top of P6 of "Supported OSC Commands.pdf"
         sendMessage(unsub);
     }
 
@@ -213,7 +213,6 @@ namespace EosComms
         msg.add((float)val); // use a float cast on a float variable just to be safe and make sure the overridden add() function uses the correct datatype
 
         sendMessage(msg); // send it!
-        
     }
 
 //////////////////////////////////////////// Utility Functions ////////////////////////////////////////////
@@ -229,9 +228,8 @@ namespace EosComms
     // handles "/eos/out/ping" messages
     void handlePingResponse(OSCMessage& msg, int matchedPatternOffset)
     {
-        // digitalWrite(LED_BUILTIN, HIGH);
         // this lowkey doesn't have to do anything lol.
-        // just have a function for completeness.2
+        // just have a function for completeness/consistency.
         // noting that we're connected and updating our receive time is handled by prior functions.
         return;
     }
@@ -244,7 +242,7 @@ namespace EosComms
         String selectionString = String(selectionBuffer);
 
         // this handles the case where an empty string is sent with the message, which signifies the de-selection of all channels
-        // like when you clear the command line it sends this (which is a little goofy but ok) 
+        // example: when you clear the command line it sends this (which is a little goofy but ok) 
         if(selectionString.equals("")){ 
             storage->clear();
             return;
@@ -280,7 +278,6 @@ namespace EosComms
     // handles "/eos/out/active/wheel/*" messages
     void handleWheelUpdate(OSCMessage& msg, int matchedPatternOffset)
     {
-        // msgOSC = msg;
         // pull the wheel index out of the address
         // we can get away with such a small buffer
         // bc the wheel index should be max 2 digits in basically all cases
@@ -293,6 +290,7 @@ namespace EosComms
         int16_t paramIndex = storage->find(index);
 
         // if it's a null param, then the category is 0
+        // determined this behavior to be true experimentally, is not documented
         // whether this is a heuristic is unknown
         if(category == 0){
             // it being a null param means we need to remove it
@@ -329,16 +327,13 @@ namespace EosComms
             // add a new parameter to our storage
             storage->addParam(index, paramName, category, value);
         }
-        // there is a param at this index but it's not the same as our new one
+        // if there is a param at this index but it's not the same as our new one
         else if(!storage->getParam(paramIndex).name.equals(paramName)){
-            // Serial1.print(index);
-            // Serial1.print("new param name: " + paramName);
-            // Serial1.println(paramIndex);
-            storage->clearFromParam(paramIndex);
-            storage->addParam(index, paramName, category, value);
+            storage->clearFromParam(paramIndex); // remove the previous one
+            storage->addParam(index, paramName, category, value); // add the new one
         }
         else{
-            storage->setParamValue(paramIndex, value); // in this case we just care about updating the value
+            storage->setParamValue(paramIndex, value); // in this case we just update the value of the param
         }
 
         return;

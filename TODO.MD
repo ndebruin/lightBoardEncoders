@@ -4,3 +4,4 @@
 * Test support with multiple encoders
 * Implement parameter type selection w. buttons
 * Implement multiple screens???
+* re-write handleParameterUpdate()

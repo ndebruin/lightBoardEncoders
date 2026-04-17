@@ -29,10 +29,6 @@ class Wheel
             // update our ticks
             commandTicks = encoder.read() /4;
 
-            // Serial1.println(String(commandTicks));
-
-            // Serial1.println(String(getCommand()));
-
             // coarse / fine logic
             bool debounceState = debouncer.update(!digitalRead(buttonPin), millis());
             // edge detection if it's actually been pressed

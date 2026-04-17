@@ -75,7 +75,6 @@ class Display
             setTextSettings();
 
             display.println(input);
-            // display.display();
         };
 
         void println(const char* str)
@@ -83,7 +82,6 @@ class Display
             setTextSettings();
 
             display.println(str);
-            // display.display();
         }
 
         void show()

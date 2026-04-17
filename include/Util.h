@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <string.h>
 
 #define encoderButtonDebounceTime 10
 #define buttonDebounceTime 10
