@@ -2308,7 +2308,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Interface_Expansion:PCA9548APW"
+		(symbol "Interface_Expansion:PCA9548ADB"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2325,7 +2325,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "PCA9548APW"
+			(property "Value" "PCA9548ADB"
 				(at 1.016 21.59 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2336,7 +2336,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm"
+			(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
 				(at 0 -25.4 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2358,7 +2358,7 @@
 					)
 				)
 			)
-			(property "Description" "Low voltage 8-channel I2C switch with reset, TSSOP-24"
+			(property "Description" "Low voltage 8-channel I2C switch with reset, SSOP-24"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2380,7 +2380,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "TSSOP*4.4x7.8mm*P0.65mm*"
+			(property "ki_fp_filters" "SSOP*5.3x8.2mm*P0.65mm*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2391,7 +2391,7 @@
 					)
 				)
 			)
-			(symbol "PCA9548APW_0_1"
+			(symbol "PCA9548ADB_0_1"
 				(rectangle
 					(start -7.62 20.32)
 					(end 7.62 -22.86)
@@ -2404,7 +2404,7 @@
 					)
 				)
 			)
-			(symbol "PCA9548APW_1_1"
+			(symbol "PCA9548ADB_1_1"
 				(pin input line
 					(at -10.16 -12.7 0)
 					(length 2.54)
@@ -5216,17 +5216,6 @@
 		)
 		(uuid "b0b7285e-f008-454b-8444-f593b181d88d")
 	)
-	(text "Todo:\nCheck Footprints for all items\nBuild digikey list\nPCB layout"
-		(exclude_from_sim no)
-		(at 27.94 28.448 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b16a3235-ca15-4fd0-8896-14068c65718a")
-	)
 	(text "16MHz\nClock\n"
 		(exclude_from_sim no)
 		(at 151.384 78.74 0)
@@ -5248,12 +5237,6 @@
 			(justify right)
 		)
 		(uuid "e4518da2-5b24-4c7d-b6f1-447abae37d64")
-	)
-	(junction
-		(at 127 135.89)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "00e6a376-e8ef-4ec2-bbbd-78560a4b842f")
 	)
 	(junction
 		(at 219.71 52.07)
@@ -5370,6 +5353,12 @@
 		(uuid "372d6a33-d72f-46a4-949e-eab8c618c10a")
 	)
 	(junction
+		(at 215.9 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "374a0bd7-e728-47f8-990a-18f52fc2ad3c")
+	)
+	(junction
 		(at 220.98 54.61)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5412,16 +5401,16 @@
 		(uuid "641580ce-1d87-4790-9539-c1d1da83eee4")
 	)
 	(junction
-		(at 195.58 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6baa9fab-d671-47d4-8810-8069b26e124a")
-	)
-	(junction
 		(at 119.38 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6c358c45-80e1-4d69-aa13-5c9a83f6303b")
+	)
+	(junction
+		(at 195.58 125.73)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "73288987-b13b-4c24-aef7-4f49fdb999ab")
 	)
 	(junction
 		(at 229.87 102.87)
@@ -5452,12 +5441,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7fb44d10-7401-43ed-a385-c7ce93e8bc34")
-	)
-	(junction
-		(at 195.58 125.73)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "83e8a1cc-2248-4ddb-97be-794db94b27bb")
 	)
 	(junction
 		(at 104.14 133.35)
@@ -5514,10 +5497,10 @@
 		(uuid "9e9936cc-0109-41ec-8f6c-3c4a80e9e90d")
 	)
 	(junction
-		(at 215.9 95.25)
+		(at 127 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "9fda700e-6c4f-4329-a5a5-2a46cdc5320f")
+		(uuid "a8a88b70-bc54-454f-b352-8578bc3f12d5")
 	)
 	(junction
 		(at 220.98 85.09)
@@ -5530,6 +5513,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b933fd3f-a115-4970-ac87-6216f1c58c3b")
+	)
+	(junction
+		(at 195.58 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "be34152d-ad39-4354-822a-34437e480a9d")
 	)
 	(junction
 		(at 220.98 66.04)
@@ -5973,7 +5962,7 @@
 	)
 	(wire
 		(pts
-			(xy 195.58 125.73) (xy 195.58 127)
+			(xy 195.58 120.65) (xy 195.58 123.19)
 		)
 		(stroke
 			(width 0)
@@ -6190,6 +6179,16 @@
 			(type default)
 		)
 		(uuid "29ff75f8-0307-486e-a2ee-def7567b8330")
+	)
+	(wire
+		(pts
+			(xy 127 135.89) (xy 128.27 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2aca07b5-9525-43f0-85f6-a53a3ff7f7ba")
 	)
 	(wire
 		(pts
@@ -6723,16 +6722,6 @@
 	)
 	(wire
 		(pts
-			(xy 127 135.89) (xy 134.62 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "564d2f6a-ab50-4752-ae68-90029affa2ef")
-	)
-	(wire
-		(pts
 			(xy 154.94 25.4) (xy 149.86 25.4)
 		)
 		(stroke
@@ -7063,16 +7052,6 @@
 	)
 	(wire
 		(pts
-			(xy 195.58 120.65) (xy 195.58 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "75c97937-83d3-48cb-8696-e209106add62")
-	)
-	(wire
-		(pts
 			(xy 93.98 91.44) (xy 95.25 91.44)
 		)
 		(stroke
@@ -7080,16 +7059,6 @@
 			(type default)
 		)
 		(uuid "77c2bf09-0c6e-4fcd-83e2-6f642abeda3b")
-	)
-	(wire
-		(pts
-			(xy 195.58 123.19) (xy 195.58 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7959d400-baa2-488b-8a5e-ecce3d03d2f4")
 	)
 	(wire
 		(pts
@@ -7480,6 +7449,16 @@
 			(type default)
 		)
 		(uuid "92369a14-5b13-4a38-b7cb-554601afecc1")
+	)
+	(wire
+		(pts
+			(xy 133.35 135.89) (xy 134.62 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "932d0406-439f-4c55-800e-c53b76cec50a")
 	)
 	(wire
 		(pts
@@ -8110,6 +8089,26 @@
 			(type default)
 		)
 		(uuid "cd525000-aac4-42f0-bb2d-80af606b174a")
+	)
+	(wire
+		(pts
+			(xy 195.58 125.73) (xy 195.58 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce14511a-4d72-482e-98a2-714df700cbe1")
+	)
+	(wire
+		(pts
+			(xy 195.58 123.19) (xy 195.58 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf7c776d-4d53-4e9b-a9e8-97f1df8828df")
 	)
 	(wire
 		(pts
@@ -11025,7 +11024,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 162.56 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -11273,7 +11272,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 173.99 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -11355,7 +11354,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 127 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -11436,7 +11435,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 85.09 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -11596,7 +11595,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 162.56 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -11667,7 +11666,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "270"
+		(property "Value" "150"
 			(at 137.16 134.6199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11678,7 +11677,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 134.62 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -11759,7 +11758,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 227.33 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -11841,7 +11840,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 222.25 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -12077,7 +12076,7 @@
 				)
 			)
 		)
-		(property "Value" "TPS62A01DRL"
+		(property "Value" "TPS62A01DRLR"
 			(at 104.14 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12183,7 +12182,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 247.65 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -12421,7 +12420,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 152.4 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -12750,7 +12749,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 166.37 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -13037,7 +13036,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 186.69 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -13209,7 +13208,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 215.9 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -13291,7 +13290,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 218.44 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -13528,7 +13527,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 247.65 25.4 0)
 			(hide yes)
 			(show_name no)
@@ -13688,7 +13687,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 250.19 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -13770,7 +13769,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 157.48 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -13849,7 +13848,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 271.78 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -14085,7 +14084,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 168.91 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -14177,7 +14176,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 189.23 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -14413,7 +14412,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 156.21 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -14492,7 +14491,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm_MountingHoles"
+		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm"
 			(at 261.62 28.956 0)
 			(hide yes)
 			(show_name no)
@@ -14585,7 +14584,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 189.23 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -14667,7 +14666,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "STM32L072CZTx"
+		(property "Value" "STM32L072CZT6TR"
 			(at 117.7133 106.68 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14991,7 +14990,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 148.59 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -15073,7 +15072,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 203.2 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -15233,7 +15232,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
 			(at 172.72 110.49 0)
 			(hide yes)
 			(show_name no)
@@ -15315,7 +15314,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 203.2 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -15408,7 +15407,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 229.87 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -15490,7 +15489,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 134.62 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -15550,6 +15549,153 @@
 		)
 	)
 	(symbol
+		(lib_id "Interface_Expansion:PCA9548ADB")
+		(at 205.74 113.03 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "73bf403b-7a14-433a-9b4c-24196b75e00a")
+		(property "Reference" "U2"
+			(at 209.042 137.668 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PCA9548ADB"
+			(at 209.042 140.208 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
+			(at 205.74 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/pca9548a.pdf"
+			(at 207.01 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Low voltage 8-channel I2C switch with reset, SSOP-24"
+			(at 205.74 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "13"
+			(uuid "a331ba99-8a8c-4098-92ff-990470c2e6c7")
+		)
+		(pin "12"
+			(uuid "be450d63-fe08-4127-8c17-f7e4f4ad8657")
+		)
+		(pin "11"
+			(uuid "e8aa379b-7633-474d-a9b8-0b454b97c2e8")
+		)
+		(pin "14"
+			(uuid "3b048461-5de3-4a29-9bc8-801a47509877")
+		)
+		(pin "16"
+			(uuid "bf459802-38a6-4e33-a346-3d832fb1a857")
+		)
+		(pin "10"
+			(uuid "ad7b0ca4-6903-4b79-abb2-89f80ecf4cd2")
+		)
+		(pin "9"
+			(uuid "67206510-8d4c-43a6-8fae-a3b2f156cdeb")
+		)
+		(pin "19"
+			(uuid "ac37621d-8811-4efd-bb05-751ddd4b4d50")
+		)
+		(pin "20"
+			(uuid "d1c59c3d-1f79-4067-a685-972fc5f9c3e7")
+		)
+		(pin "18"
+			(uuid "abba1bf3-eb84-4e16-8382-870e193e3749")
+		)
+		(pin "8"
+			(uuid "fe3f155b-37e1-400d-8088-a657dfdc8ce6")
+		)
+		(pin "21"
+			(uuid "59b06788-5e2b-4c73-b95b-a48a314f2269")
+		)
+		(pin "15"
+			(uuid "793fb976-ac35-4629-b958-3d754497972c")
+		)
+		(pin "17"
+			(uuid "1d538f1c-bb02-47bb-b62c-38af757a9557")
+		)
+		(pin "24"
+			(uuid "7fb14108-0684-49fb-8131-8806932d9925")
+		)
+		(pin "22"
+			(uuid "a35bb001-e875-48b7-8043-532da7ed3f6e")
+		)
+		(pin "23"
+			(uuid "925d6aaa-64ca-477f-b9e9-d9d0417bf870")
+		)
+		(pin "7"
+			(uuid "b0f2e02c-9dfd-44ea-8413-3988f83594c4")
+		)
+		(pin "2"
+			(uuid "e1ec799c-6425-4ea2-9447-c4034950d319")
+		)
+		(pin "1"
+			(uuid "3dc28955-897f-4172-91d8-123ee0a786a2")
+		)
+		(pin "6"
+			(uuid "3055491b-50f4-4e97-9320-ab792e337b3a")
+		)
+		(pin "5"
+			(uuid "496ca9be-cd54-481b-8ac6-2105f83caca9")
+		)
+		(pin "4"
+			(uuid "d055cfd9-5435-4f57-9cd7-9936f4509fd8")
+		)
+		(pin "3"
+			(uuid "a6a0fa18-42f7-4c47-b14e-7aaa3c29de31")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small")
 		(at 247.65 86.36 0)
 		(mirror y)
@@ -15583,7 +15729,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 247.65 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -15741,7 +15887,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 228.6 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -15975,7 +16121,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 271.78 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -16471,7 +16617,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 148.59 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -16809,7 +16955,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 119.38 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -16891,7 +17037,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 182.88 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -17062,7 +17208,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 231.14 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -17143,7 +17289,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 193.04 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -17302,7 +17448,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 219.71 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -17714,7 +17860,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 250.19 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -17764,6 +17910,86 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
+		(at 130.81 135.89 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aab7db99-248e-4699-85dd-d6e32c04fcef")
+		(property "Reference" "R32"
+			(at 130.81 130.81 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "150"
+			(at 130.81 133.35 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 130.81 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 130.81 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 130.81 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0070b1ba-f5ca-452a-95da-3064519d1213")
+		)
+		(pin "2"
+			(uuid "a7cfb7d9-f17d-4410-bc14-530ee91d3855")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
 		(at 250.19 25.4 0)
 		(unit 1)
 		(body_style 1)
@@ -17796,7 +18022,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 250.19 25.4 0)
 			(hide yes)
 			(show_name no)
@@ -18587,7 +18813,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 250.19 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -18636,153 +18862,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Interface_Expansion:PCA9548APW")
-		(at 205.74 113.03 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "be648cd3-bb1a-43e1-9d25-fff7ec9dc1e4")
-		(property "Reference" "U2"
-			(at 207.518 137.414 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PCA9548APW"
-			(at 207.772 139.192 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm"
-			(at 205.74 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/pca9548a.pdf"
-			(at 207.01 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Low voltage 8-channel I2C switch with reset, TSSOP-24"
-			(at 205.74 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "12"
-			(uuid "8686e7be-fe50-4a19-9564-467b2f8c7bad")
-		)
-		(pin "2"
-			(uuid "e9c35ad9-68f5-4fb3-863e-4a1f6ff4909a")
-		)
-		(pin "23"
-			(uuid "a4098d33-29d9-4276-9bdd-82211a8e6f0f")
-		)
-		(pin "3"
-			(uuid "1993fd9d-d962-49e2-9544-719c122b66b9")
-		)
-		(pin "13"
-			(uuid "8b2c43dd-0e5b-445f-97b2-d2e2f95077a9")
-		)
-		(pin "9"
-			(uuid "1d21a7f0-fcfd-4390-ae7c-7b167077a870")
-		)
-		(pin "4"
-			(uuid "c17706b9-a7ae-4819-81ea-96548682c790")
-		)
-		(pin "10"
-			(uuid "03e5bf4b-cf6b-47db-a08c-e3993eccddf5")
-		)
-		(pin "22"
-			(uuid "8f7be7ee-6401-4bbb-b512-908e65dc0f3a")
-		)
-		(pin "17"
-			(uuid "e6aae76b-32d0-4497-a62f-c9a9cc35676e")
-		)
-		(pin "15"
-			(uuid "cdc63cd5-0a25-4581-bd3a-029f81ac3c8f")
-		)
-		(pin "19"
-			(uuid "c74e1435-f5cf-421c-836e-5730622bb251")
-		)
-		(pin "6"
-			(uuid "b6678cf6-1261-4cc9-a63e-48381cc6fb86")
-		)
-		(pin "24"
-			(uuid "015a4ee7-3185-4392-8221-8dd9438158de")
-		)
-		(pin "20"
-			(uuid "e5ec3396-82ca-429c-9d52-1c399b6d215c")
-		)
-		(pin "7"
-			(uuid "12dadeb1-1200-4bb1-911d-f37a3fc7f15f")
-		)
-		(pin "1"
-			(uuid "92a36de5-55ef-4d27-9bc5-efc977610d35")
-		)
-		(pin "5"
-			(uuid "6440ab0f-77af-446b-b4bf-0aa9e55f05ab")
-		)
-		(pin "11"
-			(uuid "6d21d193-9780-415d-8bb4-6a1450cfff16")
-		)
-		(pin "18"
-			(uuid "77906122-a21f-4cec-b700-7223b57ddb23")
-		)
-		(pin "8"
-			(uuid "f44d7279-10c0-4fca-ba57-549970bd154e")
-		)
-		(pin "14"
-			(uuid "7b830ad9-e1c8-42eb-89fe-fb99d32a5412")
-		)
-		(pin "21"
-			(uuid "07dd147f-6ced-436e-ae24-8438627b7824")
-		)
-		(pin "16"
-			(uuid "1958b7de-445e-476c-a9e8-7491cd7b828a")
-		)
-		(instances
-			(project "eosEncoderBoard"
-				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
-					(reference "U2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small")
 		(at 148.59 66.04 0)
 		(unit 1)
@@ -18815,7 +18894,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 148.59 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -18896,7 +18975,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 119.38 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -18977,7 +19056,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 189.23 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -19137,7 +19216,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 182.88 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -19698,7 +19777,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 168.91 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -19778,7 +19857,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_1008_2520Metric"
 			(at 115.57 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -20026,7 +20105,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 168.91 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -20107,7 +20186,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 93.98 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -20267,7 +20346,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 247.65 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -20349,7 +20428,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 162.56 66.04 0)
 			(hide yes)
 			(show_name no)
