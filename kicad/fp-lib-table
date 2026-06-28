@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "SwitchLED") (type "KiCad") (uri "${KIPRJMOD}/SwitchLED.pretty") (options "") (descr ""))
+)
