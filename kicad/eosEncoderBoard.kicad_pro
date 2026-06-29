@@ -76,7 +76,12 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "lib_footprint_mismatch|256050000|62975000|b8561500-7fed-488c-adc2-51d91c268d5a|00000000-0000-0000-0000-000000000000",
+          "Silkscreen Moment"
+        ]
+      ],
       "meta": {
         "version": 2
       },
