@@ -35,7 +35,7 @@ namespace EosComms
         void sendHandshakeReply()
         {
             slipSerial->beginPacket();
-            slipSerial->write((const uint8_t*)HANDSHAKE_REPLY.c_str(), (size_t)HANDSHAKE_REPLY.length());
+            slipSerial->write((const uint8_t*)HANDSHAKE_REPLY.c_str(), HANDSHAKE_REPLY.length());
             slipSerial->endPacket();
             lastTimeSent = millis();
         }
@@ -309,7 +309,6 @@ namespace EosComms
         uint valueIndexEnd = paramNameString.indexOf(']');
         String paramName = paramNameString.substring(0,valueIndexStart-1); // -1 includes the seperating space
         String paramValue = paramNameString.substring(valueIndexStart+1,valueIndexEnd); // +1 as the start index is inclusive
-        float stringValue = paramValue.toFloat();
 
         /*
             there seems to be two ways to get the value of the parameter.
@@ -319,7 +318,7 @@ namespace EosComms
             that provides the true value (similar to using the data key on the console) as a float argument in the message
             after the category argument.
         */
-        // float value = stringValue;
+        // float value = paramValue.toFloat();
         float value = msg.getFloat(2);
 
         // if we don't already have a param at this index

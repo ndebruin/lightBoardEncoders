@@ -2,20 +2,23 @@
 
 #include <Arduino.h>
 
-// holy OSC includes
-#include <OSCBoards.h>
-#include <OSCBundle.h>
-#include <OSCData.h>
-#include <OSCMatch.h>
 #include <OSCMessage.h>
-#include <OSCTiming.h>
+#ifdef BOARD_HAS_USB_SERIAL
 #include <SLIPEncodedUSBSerial.h>
-#include <string.h>
+#else
+#include <SLIPEncodedSerial.h>
+#endif
 
-#include "Strings.h"
-#include "Util.h"
+#include "Parameter.h"
 #include "Wheel.h"
 #include "DataStorage.h"
+
+// ETC Eos Communication Strings
+const String HANDSHAKE_QUERY = "ETCOSC?"; 
+const String HANDSHAKE_REPLY = "OK";
+
+#define timeoutPingTime 10000 // 10 second
+#define timeoutDisconnectTime 30000 // 30 seconds
 
 /*
     due to weirdness with namespaces we only declare the functions

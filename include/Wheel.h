@@ -4,7 +4,7 @@
 #include <Encoder.h>
 #include <string.h>
 
-#include "Util.h"
+#include "Parameter.h"
 #include "Debouncer.h"
 
 enum WheelMode
@@ -12,6 +12,8 @@ enum WheelMode
     Coarse = 0,
     Fine = 1
 };
+
+#define encoderButtonDebounceTime 10
 
 class Wheel
 {

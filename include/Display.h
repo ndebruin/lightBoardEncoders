@@ -2,23 +2,25 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#include "Util.h"
+#include "Parameter.h"
 #include "Strings.h"
+
+#define DISPLAY_ADDR 0x3C
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
 
 class Display
 {
     public:
-        Display(uint16_t width, uint16_t height, TwoWire* wireInterface, uint i2cAddress)
-            : display(Adafruit_SSD1306((uint8_t)width, (uint8_t)height, wireInterface, -1)),
-            addr(i2cAddress)
+        Display(TwoWire* wireInterface)
+            : display(Adafruit_SSD1306((uint8_t)SCREEN_WIDTH, (uint8_t)SCREEN_HEIGHT, wireInterface, -1))
             {};
 
         bool begin()
         {
-            bool status = display.begin(SSD1306_SWITCHCAPVCC, addr, true, false);
+            bool status = display.begin(SSD1306_SWITCHCAPVCC, DISPLAY_ADDR, true, false);
 
             if(!status){
                 return false;
@@ -40,26 +42,24 @@ class Display
         {
             setTextSettings();
 
-            display.println(param.index);
+            // display.println(param.index);
             display.println(param.name);
-            display.println(param.category);
-            display.println(param.name);
+            // display.println(param.category);
+            display.println(param.value);
 
             display.display();
         }
 
         void showDisplayInit()
         {
-            setTextSettings();
+            display.setTextSize(1);
+            display.setTextColor(SSD1306_WHITE);
+            display.cp437(true);
 
             display.println(initString1);
             display.println(initString2);
             display.println(initString3);
             display.println(initString4);
-            display.println(initString5);
-            display.println(initString6);
-            display.println(initString7);
-            display.println(initString8);
 
 
             display.display();
@@ -91,11 +91,10 @@ class Display
 
     private:
         Adafruit_SSD1306 display;
-        uint addr;
 
         void setTextSettings()
         {
-            display.setTextSize(1);
+            display.setTextSize(2);
             display.setTextColor(SSD1306_WHITE);
             display.cp437(true);
         };

@@ -1,12 +1,7 @@
 #include <Arduino.h>
 
-// holy OSC includes
 #include <OSCBoards.h>
-#include <OSCBundle.h>
-#include <OSCData.h>
-#include <OSCMatch.h>
 #include <OSCMessage.h>
-#include <OSCTiming.h>
 #ifdef BOARD_HAS_USB_SERIAL
 #include <SLIPEncodedUSBSerial.h>
 SLIPEncodedUSBSerial SLIPSerial(thisBoardsSerialUSB);
@@ -14,11 +9,10 @@ SLIPEncodedUSBSerial SLIPSerial(thisBoardsSerialUSB);
 #include <SLIPEncodedSerial.h>
 SLIPEncodedSerial SLIPSerial(Serial);
 #endif
-#include <string.h>
 
 #include "Wheel.h"
 #include "Display.h"
-#include "Util.h"
+#include "Parameter.h"
 #include "Debouncer.h"
 #include "Pins.h"
 #include "EosComms.h"
@@ -28,10 +22,11 @@ SLIPEncodedSerial SLIPSerial(Serial);
 
 DataStorage storage;
 
-Display display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, DISPLAY_ADDR);
+Display display(&Wire);
 
 Wheel wheel1(ENC_A, ENC_B, ENC_SW);
 
+#define buttonDebounceTime 10
 Debouncer nextDebouncer(buttonDebounceTime);
 Debouncer lastDebouncer(buttonDebounceTime);
 

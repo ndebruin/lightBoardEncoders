@@ -5471,7 +5471,7 @@
 	)
 	(text "Place 1u near VDDA\nPlace 1x0.1u near each VDD+VDDA"
 		(exclude_from_sim no)
-		(at 144.526 143.002 0)
+		(at 144.018 143.002 0)
 		(effects
 			(font
 				(size 1.27 1.27)
