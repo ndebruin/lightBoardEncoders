@@ -10,7 +10,7 @@ Extends the Serial class to encode SLIP over serial
 #include <Stream.h>
 
 
-#if (defined(TEENSYDUINO) && defined(USB_SERIAL)) || (!defined(TEENSYDUINO) && defined(__AVR_ATmega32U4__)) || defined(__SAM3X8E__) || (defined(_USB) && defined(_USE_USB_FOR_SERIAL_)) || defined(BOARD_maple_mini) || defined(_SAMD21_)
+#if (defined(CORE_TEENSY) && defined(USB_SERIAL)) || (!defined(CORE_TEENSY) && defined(__AVR_ATmega32U4__)) || defined(__SAM3X8E__) || (defined(_USB) && defined(_USE_USB_FOR_SERIAL_)) || defined(BOARD_maple_mini) || defined(_SAMD21_) || defined(__ARM__) || defined(_STM32_)
 
 
 //import the serial USB object
@@ -46,7 +46,7 @@ private:
 #elif defined(__SAM3X8E__) || defined(__AVR_ATmega32U4__) || defined(_SAMD21_)  || defined(__ARM__)
 Serial_
     
-#elif defined(__PIC32MX__) || defined(BOARD_maple_mini) 
+#elif defined(__PIC32MX__) || defined(BOARD_maple_mini) || defined(_STM32_)
     USBSerial
     
 #else
@@ -62,7 +62,7 @@ public:
 #elif defined(__SAM3X8E__) || defined(__AVR_ATmega32U4__)  || defined(_SAMD21_)  || defined(__ARM__)
     Serial_
                          
-#elif defined(__PIC32MX__) || defined(BOARD_maple_mini)
+#elif defined(__PIC32MX__) || defined(BOARD_maple_mini) || defined(_STM32_)
     USBSerial
 #else
 #error Unknown USBserial type

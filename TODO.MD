@@ -14,7 +14,7 @@ the following deal with the fact that plenty of RAM is available, but flash is a
 
 the following deal with porting to an STM32
 * replace/supplement Encoder.h with one backed by the STM32's hardware timer encoder reading (look at STM32Duino HardwareTimer library)
-* port OSC SLIPSerial to support STM32 native USB serial
+~~* port OSC SLIPSerial to support STM32 native USB serial~~
 * STM32 dev board environment profile
 * try with an STM32 board? (can i find a nucleo or blue/blackpill?)
 
