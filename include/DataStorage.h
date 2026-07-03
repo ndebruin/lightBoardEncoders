@@ -1,16 +1,18 @@
 #pragma once
 
 #include <Arduino.h>
-#include <vector>
+// #include <vector>
 
 #include "Parameter.h"
+
+#define STORAGE_LENGTH 128 // this is like probably overkill but just define it based off of left over SRAM
 
 class DataStorage
 {
     public:
         DataStorage(){}
 
-        void clear()
+        void clearChannel()
         {
             channelValue = 0.0;
             channelSelection = "";
@@ -24,23 +26,20 @@ class DataStorage
 
         void removeParam(int32_t eosIndex)
         {
-            int index = find(eosIndex);
-            if(index == -1){return;};
-            params.erase(params.begin()+index);
+            params2[eosIndex-1] = nullParam;
+            paramsSize--;
         }
 
-        void clearFromParam(size_t vectorIndex)
-        {
-            params.erase(params.begin()+vectorIndex, params.end());
-        }
-        
-        // unsure if this works tbh
-        void addParam(Parameter param)
-        {
-            params.push_back(param);
+        bool addParam(Parameter param)
+        {  
+            if(param.index-1 >= STORAGE_LENGTH){return false;} // if we overload the storage array then we return false
+
+            params2[param.index-1] = param;
+            paramsSize++;
+            return true;
         }
 
-        void addParam(int32_t index, String name, int32_t category, float value)
+        bool addParam(int32_t index, String name, int32_t category, float value)
         {
             Parameter param;
             param.index = index;
@@ -48,14 +47,14 @@ class DataStorage
             param.category = category;
             param.value = value;
             
-            params.push_back(param);
+            return addParam(param);
         }
 
-        uint getParamCount(){ return params.size(); };
+        uint getParamCount(){ return paramsSize; };
 
-        Parameter getParam(uint index){ return params.at(index); };
+        Parameter getParam(uint16_t index){ return params2[index]; };
 
-        void setParamValue(uint index, float value){ params.at(index).value = value; };
+        void setParamValue(uint16_t index, float value){ params2[index].value = value; };
 
         String getChannelSelection(){ return channelSelection; };
         float getChannelValue(){ return channelValue; };
@@ -66,8 +65,8 @@ class DataStorage
         int find(int32_t paramIndex)
         {
             // basic iterator that works in O(N) time which is fine
-            for(uint i=0; i < params.size(); i++){
-                if(params.at(i).index == paramIndex){
+            for(uint16_t i=0; i < paramsSize; i++){
+                if(params2[i].index == paramIndex){
                     return i;
                 }
             }
@@ -76,8 +75,12 @@ class DataStorage
 
 
     private:
-        std::vector<Parameter> params;
+        Parameter params2[STORAGE_LENGTH];
+        uint16_t paramsSize =0;
 
+        // an empty value has an index and category of -1. This shouldn't be matched from any real eOS output.
+        Parameter nullParam = {-1, "", -1, 0.0};
+        
         float channelValue;
         String channelSelection;
 };

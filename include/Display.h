@@ -9,7 +9,7 @@
 
 #define DISPLAY_ADDR 0x3C
 #define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
+#define SCREEN_HEIGHT 64
 
 class Display
 {
@@ -42,9 +42,9 @@ class Display
         {
             setTextSettings();
 
-            // display.println(param.index);
+            display.println(param.index);
             display.println(param.name);
-            // display.println(param.category);
+            display.println(param.category);
             display.println(param.value);
 
             display.display();
@@ -94,7 +94,7 @@ class Display
 
         void setTextSettings()
         {
-            display.setTextSize(2);
+            display.setTextSize(1);
             display.setTextColor(SSD1306_WHITE);
             display.cp437(true);
         };

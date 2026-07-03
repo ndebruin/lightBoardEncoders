@@ -9,3 +9,4 @@ struct Parameter
     int32_t category;
     float value;
 };
+

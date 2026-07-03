@@ -102,10 +102,6 @@ namespace EosComms
     /// @param msg OSCMessage object which is addressed for our callback.
     void handleChannelUpdate(OSCMessage& msg, int matchedPatternOffset);
 
-    /// @brief Logic for updating parameter values when we get an update for a parameter from Eos.
-    /// @param msg OSCMessage object which is addressed for our callback.
-    // void handleParameterUpdate(OSCMessage& msg, int matchedPatternOffset);
-
     /// @brief Logic for updating parameter wheels when we get an update on channel selection from Eos.
     /// @param msg OSCMessage object which is addressed for our callback.
     void handleWheelUpdate(OSCMessage& msg, int matchedPatternOffset);

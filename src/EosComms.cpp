@@ -58,7 +58,6 @@ namespace EosComms
             filter.add("/eos/out/active/chan"); // selected channel details
             filter.add("/eos/out/active/wheel/*"); // control parameters of the channel
             filter.add("/eos/out/ping"); // ping back messages
-            // filter.add("/eos/out/param/*"); // updates on parameter values
             sendMessage(filter);
         }
 
@@ -66,11 +65,9 @@ namespace EosComms
         /// @param msg The OSCMessage object to route.
         void routeOSCMessage(OSCMessage& msg)
         {
-            
             msg.route("/eos/out/ping",handlePingResponse); // ping responses
             msg.route("/eos/out/active/chan",handleChannelUpdate); // selected channel details
             msg.route("/eos/out/active/wheel",handleWheelUpdate); // control parameters of the channel
-            // msg.route("/eos/out/param/",handleParameterUpdate); // updates on parameter values
         }
 
         /// @brief Handles a received generic string.
@@ -244,7 +241,7 @@ namespace EosComms
         // this handles the case where an empty string is sent with the message, which signifies the de-selection of all channels
         // example: when you clear the command line it sends this (which is a little goofy but ok) 
         if(selectionString.equals("")){ 
-            storage->clear();
+            storage->clearChannel();
             return;
         }
 
@@ -256,24 +253,6 @@ namespace EosComms
 
         storage->setChannel(selection, value);
     }
-
-    // // handles "/eos/out/param/*" messages
-    // void handleParameterUpdate(OSCMessage& msg, int matchedPatternOffset)
-    // {
-    //     // have some fun to get the parameter name out of the address
-    //     char paramNameBuffer[32];
-    //     msg.getAddress(paramNameBuffer, matchedPatternOffset, 32);
-    //     String paramName = String(paramNameBuffer);
-    //     // pull level value from the payload
-    //     float newValue = msg.getFloat(0);
-
-        
-    //     // find the correct parameter in our storage and store the new value
-    //     int index = storage->find(paramName);
-    //     if(index >= 0){
-    //         storage->setParamValue(index, newValue);
-    //     }
-    // }
 
     // handles "/eos/out/active/wheel/*" messages
     void handleWheelUpdate(OSCMessage& msg, int matchedPatternOffset)
@@ -289,14 +268,11 @@ namespace EosComms
 
         int16_t paramIndex = storage->find(index);
 
-        // if it's a null param, then the category is 0
+        // if it's a param being removed, then the category is 0
         // determined this behavior to be true experimentally, is not documented
-        // whether this is a heuristic is unknown
+        // this is a heuristic
         if(category == 0){
-            // it being a null param means we need to remove it
-            if(paramIndex != -1){
-                storage->clearFromParam(paramIndex);
-            }
+            storage->removeParam(index);
             return;
         }
 
@@ -321,6 +297,8 @@ namespace EosComms
         // float value = paramValue.toFloat();
         float value = msg.getFloat(2);
 
+        
+
         // if we don't already have a param at this index
         if(paramIndex == -1){
             // add a new parameter to our storage
@@ -328,7 +306,7 @@ namespace EosComms
         }
         // if there is a param at this index but it's not the same as our new one
         else if(!storage->getParam(paramIndex).name.equals(paramName)){
-            storage->clearFromParam(paramIndex); // remove the previous one
+            storage->removeParam(index); // remove the previous one
             storage->addParam(index, paramName, category, value); // add the new one
         }
         else{
