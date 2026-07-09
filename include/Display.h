@@ -15,18 +15,18 @@ class Display
 {
     public:
         Display(TwoWire* wireInterface)
-            : display(Adafruit_SSD1306((uint8_t)SCREEN_WIDTH, (uint8_t)SCREEN_HEIGHT, wireInterface, -1))
+            : _display(Adafruit_SSD1306((uint8_t)SCREEN_WIDTH, (uint8_t)SCREEN_HEIGHT, wireInterface, -1))
             {};
 
         bool begin()
         {
-            bool status = display.begin(SSD1306_SWITCHCAPVCC, DISPLAY_ADDR, true, false);
+            bool status = _display.begin(SSD1306_SWITCHCAPVCC, DISPLAY_ADDR, true, false);
 
             if(!status){
                 return false;
             }
 
-            display.clearDisplay();
+            _display.clearDisplay();
 
             showDisplayInit();
 
@@ -42,61 +42,61 @@ class Display
         {
             setTextSettings();
 
-            display.println(param.index);
-            display.println(param.name);
-            display.println(param.category);
-            display.println(param.value);
+            _display.println(param.index);
+            _display.println(param.name);
+            _display.println(param.category);
+            _display.println(param.value);
 
-            display.display();
+            _display.display();
         }
 
         void showDisplayInit()
         {
-            display.setTextSize(1);
-            display.setTextColor(SSD1306_WHITE);
-            display.cp437(true);
+            _display.setTextSize(1);
+            _display.setTextColor(SSD1306_WHITE);
+            _display.cp437(true);
 
-            display.println(initString1);
-            display.println(initString2);
-            display.println(initString3);
-            display.println(initString4);
+            _display.println(initString1);
+            _display.println(initString2);
+            _display.println(initString3);
+            _display.println(initString4);
 
 
-            display.display();
+            _display.display();
         };
 
         void clear()
         {
-            display.clearDisplay();
-            display.setCursor(0,0);
+            _display.clearDisplay();
+            _display.setCursor(0,0);
         };
 
         void println(String input){
             setTextSettings();
 
-            display.println(input);
+            _display.println(input);
         };
 
         void println(const char* str)
         {
             setTextSettings();
 
-            display.println(str);
+            _display.println(str);
         }
 
         void show()
         {
-            display.display();
+            _display.display();
         }
 
     private:
-        Adafruit_SSD1306 display;
+        Adafruit_SSD1306 _display;
 
         void setTextSettings()
         {
-            display.setTextSize(1);
-            display.setTextColor(SSD1306_WHITE);
-            display.cp437(true);
+            _display.setTextSize(1);
+            _display.setTextColor(SSD1306_WHITE);
+            _display.cp437(true);
         };
 
 };

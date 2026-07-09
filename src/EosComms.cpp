@@ -6,18 +6,18 @@ namespace EosComms
 //////////////////////////////////////////// PRIVATE ////////////////////////////////////////////
 // private has to come first bc this is a source file and the C++ preprocessor is stupid
     namespace { // this creates a functional equivalent of "private:" in a class
-        SLIPEncodedUSBSerial* slipSerial; // serial object
-        DataStorage* storage;
+        SLIPEncodedUSBSerial* _slipSerial; // serial object
+        DataStorage* _storage;
         
-        bool connected = false;
-        bool sentPing = false;
-        unsigned long pingIterator = 0;
+        bool _connected = false;
+        bool _sentPing = false;
+        unsigned long _pingIterator = 0;
 
-        unsigned long lastTimeReceived;
-        unsigned long lastTimeSent;
+        unsigned long _lastTimeReceived;
+        unsigned long _lastTimeSent;
 
-        String curMsg;
-        String lastMsg;
+        String _curMsg;
+        String _lastMsg;
 
         /// @brief Sends an OSCMessage object over our SLIPSerial object.
         void sendMessage(OSCMessage& msg)
@@ -25,29 +25,29 @@ namespace EosComms
             // char buff[80];
             // msg.getAddress(buff, 0, 80);
             // Serial1.println(buff);
-            slipSerial->beginPacket();
-            msg.send(*slipSerial);
-            slipSerial->endPacket();
-            lastTimeSent = millis(); // update our timers
+            _slipSerial->beginPacket();
+            msg.send(*_slipSerial);
+            _slipSerial->endPacket();
+            _lastTimeSent = millis(); // update our timers
         }
 
         /// @brief  Sends the handshake reply. Notably not an OSC message.
         void sendHandshakeReply()
         {
-            slipSerial->beginPacket();
-            slipSerial->write((const uint8_t*)HANDSHAKE_REPLY.c_str(), HANDSHAKE_REPLY.length());
-            slipSerial->endPacket();
-            lastTimeSent = millis();
+            _slipSerial->beginPacket();
+            _slipSerial->write((const uint8_t*)HANDSHAKE_REPLY.c_str(), HANDSHAKE_REPLY.length());
+            _slipSerial->endPacket();
+            _lastTimeSent = millis();
         }
 
         /// @brief Send message to "/eos/ping". No payload.
         void sendPing()
         {
-            sentPing = true;
+            _sentPing = true;
             OSCMessage ping("/eos/ping");
-            ping.add((int32_t)pingIterator);
+            ping.add((int32_t)_pingIterator);
             sendMessage(ping);
-            pingIterator++;
+            _pingIterator++;
         }
 
         /// @brief Sends all required filters to Eos in a single OSC Message.
@@ -78,7 +78,7 @@ namespace EosComms
             if (msg.indexOf(HANDSHAKE_QUERY) != -1){
                 // handshake string found!
                 sendHandshakeReply();
-                connected = true;
+                _connected = true;
                 // also send our filters so that they are given to Eos
                 IssueFilters();
                 return;
@@ -100,24 +100,24 @@ namespace EosComms
             int size;
 
             // check if we have gotten any OSC commands/messages from Eos that we need to parse
-            size = slipSerial->available();
+            size = _slipSerial->available();
             if(size > 0){
                 // fill the message with all available bytes
                 while(size--){
-                    curMsg += (char)(slipSerial->read());
+                    _curMsg += (char)(_slipSerial->read());
                 }
             }
             // if we've gotten a whole packet of data, go handle it
-            if(slipSerial->endofPacket()){
+            if(_slipSerial->endofPacket()){
                 // update our lastReceived timers
-                lastTimeReceived = millis();
-                connected = true;
-                sentPing = false;
-                lastMsg = curMsg;
+                _lastTimeReceived = millis();
+                _connected = true;
+                _sentPing = false;
+                _lastMsg = _curMsg;
 
                 // parse our message
-                parseMessage(curMsg);
-                curMsg = String();
+                parseMessage(_curMsg);
+                _curMsg = String();
             }
             
 
@@ -127,18 +127,22 @@ namespace EosComms
     }; // end of empty namespace (equivalent to "private:" for a class)
 //////////////////////////////////////////// END OF PRIVATE /////////////////////////////////////////////
 
+
+
+
+
 //////////////////////////////////////////// Basic Functions ////////////////////////////////////////////
 
     /// @brief This replaces an equivalent class constructor.
     /// @param SLIPSerial Pointer to a SLIPEncodedUSBSerial object to use for communication to Eos.
-    void initialize(SLIPEncodedUSBSerial* SLIPSerial, DataStorage* Storage){ slipSerial = SLIPSerial; storage = Storage; };
+    void initialize(SLIPEncodedUSBSerial* SLIPSerial, DataStorage* storage){ _slipSerial = SLIPSerial; _storage = storage; };
 
     /// @brief Performs all initialization of our communication with Eos.
     /// @attention Is blocking until a Serial connection is made.
     void begin()
     {
         // actually start serial
-        slipSerial->begin(115200);
+        _slipSerial->begin(115200);
         // This is a hack around an Arduino bug. It was taken from the OSC library
 	    //examples
 	    while(!SerialUSB){}
@@ -157,12 +161,12 @@ namespace EosComms
 
         // timeout logic
         // if we're connected but haven't heard from Eos in a bit, send a keepAlive ping.
-        if(connected && !sentPing && (millis() - lastTimeReceived >= timeoutPingTime)){
+        if(_connected && !_sentPing && (millis() - _lastTimeReceived >= timeoutPingTime)){
             sendPing();
         }
         // if we still haven't heard from Eos, then after a while say that we've disconnected.
-        if(millis() - lastTimeReceived >= timeoutDisconnectTime){
-            connected = false;
+        if(millis() - _lastTimeReceived >= timeoutDisconnectTime){
+            _connected = false;
         }
 
     };
@@ -191,9 +195,9 @@ namespace EosComms
     /// @param wheel The Wheel object you wish to send command data for.
     void sendWheelData(Wheel* wheel)
     {
-        if(wheel->getParameterIndex() >= storage->getParamCount()){return;};
+        if(wheel->getParameterIndex() >= _storage->getParamCount()){return;};
         
-        uint32_t index = storage->getParam(wheel->getParameterIndex()).index;        
+        uint32_t index = _storage->getParam(wheel->getParameterIndex()).index;        
         float val = wheel->getCommand();
 
         // create the OSC address
@@ -214,11 +218,11 @@ namespace EosComms
 
 //////////////////////////////////////////// Utility Functions ////////////////////////////////////////////
 
-    bool isConnected(){return connected;};
+    bool isConnected(){return _connected;};
 
-    unsigned long getTimeSinceRX(){ return millis()-lastTimeReceived; };
+    unsigned long getTimeSinceRX(){ return millis()-_lastTimeReceived; };
 
-    String getLastRXMessage(){return lastMsg;}
+    String getLastRXMessage(){return _lastMsg;}
 
 //////////////////////////////////////////// Receive Callbacks ////////////////////////////////////////////
 
@@ -241,7 +245,7 @@ namespace EosComms
         // this handles the case where an empty string is sent with the message, which signifies the de-selection of all channels
         // example: when you clear the command line it sends this (which is a little goofy but ok) 
         if(selectionString.equals("")){ 
-            storage->clearChannel();
+            _storage->clearChannel();
             return;
         }
 
@@ -251,7 +255,7 @@ namespace EosComms
         String selectionValue = selectionString.substring(valueIndexStart+1,valueIndexEnd); // +1 as the start index is inclusive
         float value = selectionValue.toFloat();
 
-        storage->setChannel(selection, value);
+        _storage->setChannel(selection, value);
     }
 
     // handles "/eos/out/active/wheel/*" messages
@@ -266,13 +270,13 @@ namespace EosComms
              
         int32_t category = msg.getInt(1);
 
-        int16_t paramIndex = storage->find(index);
+        int16_t paramIndex = _storage->find(index);
 
         // if it's a param being removed, then the category is 0
         // determined this behavior to be true experimentally, is not documented
         // this is a heuristic
         if(category == 0){
-            storage->removeParam(index);
+            _storage->removeParam(index);
             return;
         }
 
@@ -302,15 +306,15 @@ namespace EosComms
         // if we don't already have a param at this index
         if(paramIndex == -1){
             // add a new parameter to our storage
-            storage->addParam(index, paramName, category, value);
+            _storage->addParam(index, paramName, category, value);
         }
         // if there is a param at this index but it's not the same as our new one
-        else if(!storage->getParam(paramIndex).name.equals(paramName)){
-            storage->removeParam(index); // remove the previous one
-            storage->addParam(index, paramName, category, value); // add the new one
+        else if(!_storage->getParam(paramIndex).name.equals(paramName)){
+            _storage->removeParam(index); // remove the previous one
+            _storage->addParam(index, paramName, category, value); // add the new one
         }
         else{
-            storage->setParamValue(paramIndex, value); // in this case we just update the value of the param
+            _storage->setParamValue(paramIndex, value); // in this case we just update the value of the param
         }
 
         return;

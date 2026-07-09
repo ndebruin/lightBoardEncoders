@@ -26,7 +26,7 @@ class DataStorage
 
         void removeParam(int32_t eosIndex)
         {
-            params2[eosIndex-1] = nullParam;
+            params[eosIndex-1] = nullParam;
             paramsSize--;
         }
 
@@ -34,7 +34,7 @@ class DataStorage
         {  
             if(param.index-1 >= STORAGE_LENGTH){return false;} // if we overload the storage array then we return false
 
-            params2[param.index-1] = param;
+            params[param.index-1] = param;
             paramsSize++;
             return true;
         }
@@ -52,9 +52,9 @@ class DataStorage
 
         uint getParamCount(){ return paramsSize; };
 
-        Parameter getParam(uint16_t index){ return params2[index]; };
+        Parameter getParam(uint16_t index){ return params[index]; };
 
-        void setParamValue(uint16_t index, float value){ params2[index].value = value; };
+        void setParamValue(uint16_t index, float value){ params[index].value = value; };
 
         String getChannelSelection(){ return channelSelection; };
         float getChannelValue(){ return channelValue; };
@@ -66,7 +66,7 @@ class DataStorage
         {
             // basic iterator that works in O(N) time which is fine
             for(uint16_t i=0; i < paramsSize; i++){
-                if(params2[i].index == paramIndex){
+                if(params[i].index == paramIndex){
                     return i;
                 }
             }
@@ -75,8 +75,8 @@ class DataStorage
 
 
     private:
-        Parameter params2[STORAGE_LENGTH];
-        uint16_t paramsSize =0;
+        Parameter params[STORAGE_LENGTH];
+        uint16_t paramsSize = 0;
 
         // an empty value has an index and category of -1. This shouldn't be matched from any real eOS output.
         Parameter nullParam = {-1, "", -1, 0.0};

@@ -5,7 +5,7 @@
 #include <string.h>
 
 #include "Parameter.h"
-#include "Debouncer.h"
+#include "Button.h"
 
 enum WheelMode
 {
@@ -13,35 +13,41 @@ enum WheelMode
     Fine = 1
 };
 
-#define encoderButtonDebounceTime 10
-
 class Wheel
 {
     public:
         Wheel(uint8_t encA, uint8_t encB, uint8_t button)
-        : encoder(Encoder(encA, encB)), buttonPin(button), debouncer(encoderButtonDebounceTime) {}
+        : _encoder(Encoder(encA, encB)), _btn(button) {}
 
         void begin()
         {
-            pinMode(buttonPin, INPUT_PULLUP);
+            _btn.begin();
         };
 
         void update()
         {
             // update our ticks
-            commandTicks = encoder.read() /4;
+            _commandTicks = _encoder.read() /4;
+
+            // update our button
+            _btn.update();
 
             // coarse / fine logic
-            bool debounceState = debouncer.update(!digitalRead(buttonPin), millis());
-            // edge detection if it's actually been pressed
-            if(debounceState && !lastDebounceState){
-                // change the mode between coarse and fine
-                if(operationMode == Coarse) { operationMode = Fine; } 
-                else                        { operationMode = Coarse; }
+            if(_btn.getState()){
+                if(_operationMode == Coarse) { _operationMode = Fine; } 
+                else                         { _operationMode = Coarse; } 
             }
 
-            // help with edge detection
-            lastDebounceState = debounceState;
+            // bool debounceState = _debouncer.update(!digitalRead(buttonPin), millis());
+            // // edge detection if it's actually been pressed
+            // if(debounceState && !lastDebounceState){
+            //     // change the mode between coarse and fine
+            //     if(operationMode == Coarse) { operationMode = Fine; } 
+            //     else                        { operationMode = Coarse; }
+            // }
+
+            // // help with edge detection
+            // lastDebounceState = debounceState;
         };
 
         // includes count reset, should be used for OSC interactions
@@ -52,33 +58,31 @@ class Wheel
             return val;
         };
 
-        void reset(){ encoder.readAndReset();};
+        void reset(){ _encoder.readAndReset();};
         
-        WheelMode getMode(){return operationMode;};
+        WheelMode getMode(){return _operationMode;};
         // doesn't reset the count, should be used for debugging
-        float getRawCommand(){ return (float)(commandTicks/1.0); };
+        float getRawCommand(){ return (float)(_commandTicks/1.0); };
 
         // check if we actually have something to send
-        bool haveUpdate(){ return abs(commandTicks) > 0; };
+        bool haveUpdate(){ return abs(_commandTicks) > 0; };
 
         // get the param index in the data storage
-        uint32_t getParameterIndex(){ return paramIndex; };
+        uint32_t getParameterIndex(){ return _paramIndex; };
 
         // set the param index in the data storage
-        void setParameterIndex(uint32_t Index){ paramIndex = Index; };
+        void setParameterIndex(uint32_t Index){ _paramIndex = Index; };
 
     private:
-        // hardware bits
-        Encoder encoder;
-        uint8_t buttonPin;
+        // encoder
+        Encoder _encoder;
         
-        // button debouncer and edge detector
-        Debouncer debouncer;
-        bool lastDebounceState;
+        // button
+        Button _btn;
 
         // index of our wheel parameter in the data storage
-        uint32_t paramIndex;
+        uint32_t _paramIndex;
 
-        WheelMode operationMode = WheelMode::Coarse;
-        int32_t commandTicks;
+        WheelMode _operationMode = WheelMode::Coarse;
+        int32_t _commandTicks;
 };

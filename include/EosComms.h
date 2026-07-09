@@ -61,7 +61,7 @@ namespace EosComms
 
     /// @brief This replaces an equivalent class constructor.
     /// @param SLIPSerial Pointer to a SLIPEncodedUSBSerial object to use for communication to Eos.
-    void initialize(SLIPEncodedUSBSerial* SLIPSerial, DataStorage* Storage);
+    void initialize(SLIPEncodedUSBSerial* SLIPSerial, DataStorage* storage);
 
     /// @brief Performs all initialization of our communication with Eos.
     /// @attention Is blocking until a Serial connection is made.
