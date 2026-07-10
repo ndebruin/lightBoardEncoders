@@ -5,7 +5,8 @@
 
 #include "Parameter.h"
 
-#define STORAGE_LENGTH 128 // this is like probably overkill but just define it based off of left over SRAM
+// this is like probably overkill but just define it based off of left over SRAM
+#define STORAGE_LENGTH 128
 
 class DataStorage
 {
@@ -16,19 +17,20 @@ class DataStorage
         {
             channelValue = 0.0;
             channelSelection = "";
-        }
+        };
 
         void setChannel(String ChannelSelection, float ChannelValue)
         {
             channelValue =  ChannelValue;
             channelSelection = ChannelSelection;
-        }
+        };
 
         void removeParam(int32_t eosIndex)
         {
+            categoryCount[((params[eosIndex-1].category)-1)]--;
             params[eosIndex-1] = nullParam;
             paramsSize--;
-        }
+        };
 
         bool addParam(Parameter param)
         {  
@@ -36,10 +38,11 @@ class DataStorage
 
             params[param.index-1] = param;
             paramsSize++;
+            categoryCount[(param.category-1)]++;
             return true;
-        }
+        };
 
-        bool addParam(int32_t index, String name, int32_t category, float value)
+        bool addParam(int32_t index, String name, Category category, float value)
         {
             Parameter param;
             param.index = index;
@@ -48,11 +51,17 @@ class DataStorage
             param.value = value;
             
             return addParam(param);
-        }
+        };
 
-        uint getParamCount(){ return paramsSize; };
+        uint16_t getParamCount(){ return paramsSize; };
 
-        Parameter getParam(uint16_t index){ return params[index]; };
+        uint16_t getCategoryParamCount(Category category){ return categoryCount[category-1]; };
+
+        Parameter getParam(int16_t index)
+        { 
+            if(index == -1){return nullParam;};
+            return params[index]; 
+        };
 
         void setParamValue(uint16_t index, float value){ params[index].value = value; };
 
@@ -71,15 +80,30 @@ class DataStorage
                 }
             }
             return -1; // not found
-        }
+        };
 
+        int16_t find(Category category, int32_t categoryIndex)
+        {
+            uint32_t categoryParamCount = 0;
+            // basic iterator that works in O(N) time which is fine
+            for(uint16_t i=0; i < paramsSize; i++){
+                if(params[i].category == category){
+                    if(categoryParamCount == (uint32_t)categoryIndex){
+                        return i;
+                    }
+                    categoryParamCount++;
+                }
+            }
+            return -1; // not found
+        };
 
     private:
         Parameter params[STORAGE_LENGTH];
         uint16_t paramsSize = 0;
+        uint16_t categoryCount[6];
 
-        // an empty value has an index and category of -1. This shouldn't be matched from any real eOS output.
-        Parameter nullParam = {-1, "", -1, 0.0};
+        // an empty value has an index of -1 and category of None. This shouldn't be matched from any real eOS output.
+        Parameter nullParam = {-1, "", Category::None, 0.0};
         
         float channelValue;
         String channelSelection;

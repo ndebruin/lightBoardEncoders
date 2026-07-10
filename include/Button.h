@@ -6,44 +6,46 @@
 
 #define buttonDebounceTime 10
 
-class Button
-{
-    public:
-        Button(uint8_t pin)
-            : _pin(pin), _debouncer(buttonDebounceTime)
-        {};
+class Button {
+  public:
+    Button(uint8_t pin, unsigned long debounceMs = buttonDebounceTime, bool activeLow = true)
+      : _pin(pin), _debounceMs(debounceMs), _activeLow(activeLow) {}
 
-        void begin()
-        {
-            pinMode(_pin, INPUT_PULLUP);
-        };
+    void begin() {
+      pinMode(_pin, _activeLow ? INPUT_PULLUP : INPUT);
+      _lastReading = digitalRead(_pin);
+      _stableState = _lastReading;
+      _lastDebounceTime = millis();
+    }
 
-        bool update()
-        {
-            _rawState = _debouncer.update(!digitalRead(_pin), millis());
+    // Call every loop(). Returns true exactly once per new press.
+    bool update() {
+      bool reading = digitalRead(_pin);
+      bool triggered = false;
 
-            // formatted like this rather than a simple assign 
-            // bc this handles holding the button
-            if(_rawState && !_pressed){
-                _pressed = true;
-            }
-            else if (!_rawState){ 
-                _pressed = false;
-            };
+      if (reading != _lastReading) {
+        _lastDebounceTime = millis();
+      }
 
-            return _pressed;
-        };
+      if ((millis() - _lastDebounceTime) > _debounceMs) {
+        if (reading != _stableState) {
+          _stableState = reading;
+          bool isPressed = _activeLow ? (_stableState == LOW) : (_stableState == HIGH);
+          if (isPressed) {
+            triggered = true;
+          }
+        }
+      }
 
-        bool getState()
-        {
-            return _pressed;
-        };
+      _lastReading = reading;
+      return triggered;
+    }
 
-    private:
-        uint8_t _pin;
-
-        Debouncer _debouncer;
-
-        bool _pressed;
-        bool _rawState;
+  private:
+    uint8_t _pin;
+    unsigned long _debounceMs;
+    bool _activeLow;
+    bool _lastReading;
+    bool _stableState;
+    unsigned long _lastDebounceTime;
 };

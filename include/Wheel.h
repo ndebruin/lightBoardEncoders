@@ -29,11 +29,8 @@ class Wheel
             // update our ticks
             _commandTicks = _encoder.read() /4;
 
-            // update our button
-            _btn.update();
-
             // coarse / fine logic
-            if(_btn.getState()){
+            if(_btn.update()){
                 if(_operationMode == Coarse) { _operationMode = Fine; } 
                 else                         { _operationMode = Coarse; } 
             }
@@ -68,10 +65,10 @@ class Wheel
         bool haveUpdate(){ return abs(_commandTicks) > 0; };
 
         // get the param index in the data storage
-        uint32_t getParameterIndex(){ return _paramIndex; };
+        int32_t getParameterIndex(){ return _paramIndex; };
 
         // set the param index in the data storage
-        void setParameterIndex(uint32_t Index){ _paramIndex = Index; };
+        void setParameterIndex(int32_t Index){ _paramIndex = Index; };
 
     private:
         // encoder
@@ -81,7 +78,7 @@ class Wheel
         Button _btn;
 
         // index of our wheel parameter in the data storage
-        uint32_t _paramIndex;
+        int32_t _paramIndex;
 
         WheelMode _operationMode = WheelMode::Coarse;
         int32_t _commandTicks;

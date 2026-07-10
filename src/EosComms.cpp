@@ -118,11 +118,28 @@ namespace EosComms
                 // parse our message
                 parseMessage(_curMsg);
                 _curMsg = String();
-            }
-            
+            }  
+        };
 
-            
-        }
+        Category categoryFromInt(int32_t category_raw)
+        {
+            switch(category_raw){
+                case 1:
+                    return Category::Intensity;
+                case 2:
+                    return Category::Focus;
+                case 3:
+                    return Category::Color;
+                case 4:
+                    return Category::Image;
+                case 5:
+                    return Category::Form;
+                case 6:
+                    return Category::Shutter;
+                default:
+                    return Category::None;
+            };
+        };
         
     }; // end of empty namespace (equivalent to "private:" for a class)
 //////////////////////////////////////////// END OF PRIVATE /////////////////////////////////////////////
@@ -195,7 +212,7 @@ namespace EosComms
     /// @param wheel The Wheel object you wish to send command data for.
     void sendWheelData(Wheel* wheel)
     {
-        if(wheel->getParameterIndex() >= _storage->getParamCount()){return;};
+        if(wheel->getParameterIndex() >= (int32_t)_storage->getParamCount()){return;};
         
         uint32_t index = _storage->getParam(wheel->getParameterIndex()).index;        
         float val = wheel->getCommand();
@@ -268,14 +285,14 @@ namespace EosComms
         msg.getAddress(wheelIndexBuffer, matchedPatternOffset+1, 4);
         uint32_t index = String(wheelIndexBuffer).toInt();
              
-        int32_t category = msg.getInt(1);
+        Category category = categoryFromInt(msg.getInt(1));
 
         int16_t paramIndex = _storage->find(index);
 
         // if it's a param being removed, then the category is 0
         // determined this behavior to be true experimentally, is not documented
         // this is a heuristic
-        if(category == 0){
+        if(category == Category::None){
             _storage->removeParam(index);
             return;
         }
