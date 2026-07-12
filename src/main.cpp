@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include <OSCBoards.h>
 #include <OSCMessage.h>
 #ifdef BOARD_HAS_USB_SERIAL
@@ -9,7 +8,6 @@ SLIPEncodedUSBSerial SLIPSerial(thisBoardsSerialUSB);
 #include <SLIPEncodedSerial.h>
 SLIPEncodedSerial SLIPSerial(Serial);
 #endif
-
 
 #include "Wheel.h"
 #include "Display.h"

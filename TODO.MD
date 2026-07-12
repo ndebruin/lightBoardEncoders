@@ -4,6 +4,8 @@
 ~~* port OSC SLIPSerial to support STM32 native USB serial~~
 ~~* re-write handleParameterUpdate()~~
 ~~* remove vector.h requirement and just pre-allocate a sufficently large static array in DataStorage.h~~
+~~* Test support with multiple encoders~~
+~~* Implement parameter type selection w. buttons~~
 
 * Display Graphic Design
 * add pre-connection diagnostic/information display
@@ -15,6 +17,5 @@ the following deal with porting to an STM32
 * try with an STM32 board? (can i find a nucleo or blue/blackpill?)
 
 the following deal with moving to my custom board
-* Test support with multiple encoders
-* Implement parameter type selection w. buttons
+
 * Implement multiple screens
