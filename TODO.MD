@@ -14,4 +14,3 @@ Custom board support:
 
 
 Bug fixes:
-* Update wheel param index when channel selection updates/changes

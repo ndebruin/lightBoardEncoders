@@ -55,6 +55,7 @@ void updateBlink();
 void updateDisplay();
 void updateWheels();
 void updateParamButtons();
+void updateFromChannel();
 bool categoryDiffAndNotNull(Category test, Category compare);
 
 
@@ -110,19 +111,44 @@ unsigned long blinkTimer; bool blinkState;
 unsigned long blinkTime = 1000; // 1Hz blink rate
 unsigned long displayTimer;
 unsigned long displayTime = 100; // 10Hz update rate
+unsigned long lastParamChangeTimer;
+unsigned long lastParamDebounceTime = 50; // 20Hz debounce rate
+uint16_t lastParamCount = 0;
+bool lastParamState;
 
 void loop()
 {
     // keep connection to Eos updated
     EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
+    EosComms::update();
 
-    // update input devices
+    if(storage.getParamCount() != lastParamCount){
+        lastParamCount = storage.getParamCount();
+        lastParamChangeTimer = millis();
+        lastParamState = false;
+    }
+
+    if(!lastParamState && (millis() - lastParamChangeTimer >= lastParamDebounceTime)) {
+        lastParamState = true;
+
+        updateFromChannel();
+    }
+    
     updateWheels();
     updateParamButtons();
 
     // if we're connected, keep blinking and updating our display
+    updateBlink();
     if(EosComms::isConnected()){
-        updateBlink();
         if(millis() - displayTimer > displayTime){
             updateDisplay();
             displayTimer = millis();
@@ -184,16 +210,17 @@ bool categoryDiffAndNotNull(Category test, Category compare)
     return (test != compare) && (test != Category::None);
 }
 
-void updateParamButtons()
-{
-    
-    // bool categoryReset = false;
 
+void updateFromChannel()
+{
     Category param1 = storage.getParam(wheel1.getParameterIndex()).category;
     Category param2 = storage.getParam(wheel2.getParameterIndex()).category;
     Category param3 = storage.getParam(wheel3.getParameterIndex()).category;
     Category param4 = storage.getParam(wheel4.getParameterIndex()).category;
-    if(param1 != currentCategory || categoryDiffAndNotNull(param2, currentCategory) || categoryDiffAndNotNull(param3, currentCategory) || categoryDiffAndNotNull(param4, currentCategory)){
+    if(categoryDiffAndNotNull(param1, currentCategory) || categoryDiffAndNotNull(param2, currentCategory) || categoryDiffAndNotNull(param3, currentCategory) || categoryDiffAndNotNull(param4, currentCategory)
+        || (param1 == None && param2 == None && param3 == None && param4 == None)
+        ){
+
         // categoryReset = true;
 
         // if((4*categoryPage) >= storage.getCategoryParamCount(currentCategory)){
@@ -211,7 +238,10 @@ void updateParamButtons()
         //     // categoryReset = false;
         // }
     }
+}
 
+void updateParamButtons()
+{
     // check if any of our buttons are pressed
     Category newCategory = Category::None;
     if(btnIntens.pressed()){newCategory = Category::Intensity;};
