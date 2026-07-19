@@ -47,3 +47,6 @@ fp-info-cache
 *.kicad_prl
 kicad/.history
 
+cubemx/devboard/generated
+cubemx/generated
+

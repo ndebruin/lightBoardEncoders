@@ -78,6 +78,7 @@ namespace EosComms
             if (msg.indexOf(HANDSHAKE_QUERY) != -1){
                 // handshake string found!
                 sendHandshakeReply();
+                _lastTimeReceived = millis();
                 _connected = true;
                 // also send our filters so that they are given to Eos
                 IssueFilters();
@@ -167,7 +168,8 @@ namespace EosComms
         // for the serial port to open, but meanwhile the handshake message was
         // sent from Eos
         delay(2500);
-        sendHandshakeReply();
+        // sendHandshakeReply();
+
     };
 
     /// @brief Checks for new received messages and handles them.
@@ -184,6 +186,7 @@ namespace EosComms
         // if we still haven't heard from Eos, then after a while say that we've disconnected.
         if(millis() - _lastTimeReceived >= timeoutDisconnectTime){
             _connected = false;
+            _pingIterator = 0;
         }
 
     };

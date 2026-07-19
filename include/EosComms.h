@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 #include <OSCMessage.h>
-#ifdef BOARD_HAS_USB_SERIAL
+#ifdef TEENSYDUINO
 #include <SLIPEncodedUSBSerial.h>
 #else
 #include <SLIPEncodedSerial.h>

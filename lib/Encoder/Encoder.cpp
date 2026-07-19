@@ -1,4 +1,4 @@
-
+#ifndef STM32
 #include "Encoder.h"
 
 // Yes, all the code is in the header file, to provide the user
@@ -8,3 +8,4 @@
 Encoder_internal_state_t * Encoder::interruptArgs[];
 
 
+#endif

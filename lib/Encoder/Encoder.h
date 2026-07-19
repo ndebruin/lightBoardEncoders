@@ -25,9 +25,10 @@
  * THE SOFTWARE.
  */
 
-
+#ifndef STM32
 #ifndef Encoder_h_
 #define Encoder_h_
+// #pragma once
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
@@ -984,4 +985,5 @@ ISR(INT7_vect) { Encoder::update(Encoder::interruptArgs[SCRAMBLE_INT_ORDER(7)]);
 #endif // ENCODER_OPTIMIZE_INTERRUPTS
 
 
+#endif
 #endif

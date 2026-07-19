@@ -1,8 +1,13 @@
 #pragma once
 
 #include <Arduino.h>
-#include <Encoder.h>
 #include <string.h>
+
+#if defined(TEENSYDUINO)
+#include <Encoder.h>
+#elif defined(STM32)
+#include "Encoder32.h"
+#endif
 
 #include "Parameter.h"
 #include "Button.h"
@@ -16,8 +21,21 @@ enum WheelMode
 class Wheel
 {
     public:
+    #ifdef STM32
+        Wheel(uint8_t button)
+        : _encoder(), _btn(button) {}
+    #else
         Wheel(uint8_t encA, uint8_t encB, uint8_t button)
         : _encoder(Encoder(encA, encB)), _btn(button) {}
+    #endif
+
+    #ifdef STM32
+        void begin(TIM_HandleTypeDef* htim)
+        {
+            _encoder.begin(htim);
+            begin();
+        }
+    #endif
 
         void begin()
         {
@@ -30,7 +48,7 @@ class Wheel
             _commandTicks = _encoder.read() /4;
 
             // coarse / fine logic
-            if(_btn.update()){
+            if(_btn.pressed()){
                 if(_operationMode == Coarse) { _operationMode = Fine; } 
                 else                         { _operationMode = Coarse; } 
             }

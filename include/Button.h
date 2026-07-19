@@ -19,7 +19,7 @@ class Button {
     }
 
     // Call every loop(). Returns true exactly once per new press.
-    bool update() {
+    bool pressed() {
       bool reading = digitalRead(_pin);
       bool triggered = false;
 
