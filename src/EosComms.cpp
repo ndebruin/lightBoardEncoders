@@ -161,15 +161,16 @@ namespace EosComms
     {
         // actually start serial
         _slipSerial->begin(115200);
+
+
         // This is a hack around an Arduino bug. It was taken from the OSC library
 	    //examples
-	    while(!SerialUSB){}
+	    // while(!SerialUSB){}
         // this is necessary for reconnecting a device because it needs some time
         // for the serial port to open, but meanwhile the handshake message was
         // sent from Eos
-        delay(2500);
+        // delay(2500);
         // sendHandshakeReply();
-
     };
 
     /// @brief Checks for new received messages and handles them.
@@ -215,7 +216,10 @@ namespace EosComms
     /// @param wheel The Wheel object you wish to send command data for.
     void sendWheelData(Wheel* wheel)
     {
+        // catch if we still have a parameter index that's greater than the number of parameters we have
         if(wheel->getParameterIndex() >= (int32_t)_storage->getParamCount()){return;};
+        // if this wheel is a null param, then don't send anything to not bog up eOS with bad messages
+        if(wheel->getParameterIndex() == -1){return;}; 
         
         uint32_t index = _storage->getParam(wheel->getParameterIndex()).index;        
         float val = wheel->getCommand();

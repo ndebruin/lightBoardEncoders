@@ -1,7 +1,8 @@
 #include <Arduino.h>
-#include <OSCBoards.h>
+// #include <OSCBoards.h>
 #include <OSCMessage.h>
 
+// holy semi-broken OSC include
 #ifdef BOARD_HAS_USB_SERIAL
 #ifdef TEENSYDUINO
 #include <SLIPEncodedUSBSerial.h>
@@ -22,12 +23,15 @@ SLIPEncodedSerial SLIPSerial(Serial);
 #include "EosComms.h"
 #include "DataStorage.h"
 
-#define DEBUG
+// #define DEBUG
+
+#define blinkTime 1000              // 1Hz blink rate
+#define displayTime 100             // 10Hz update rate
+#define lastParamDebounceTime 20   // 20ms debounce time
 
 DataStorage storage;
 
 Display display(&Wire);
-
 
 #ifdef STM32
 Wheel wheel1(ENC1_SW);
@@ -55,8 +59,8 @@ void updateBlink();
 void updateDisplay();
 void updateWheels();
 void updateParamButtons();
-void updateFromChannel();
-bool categoryDiffAndNotNull(Category test, Category compare);
+void updateParamsFromChannel();
+bool categoryDiffAndNotNull(Category test, Category compare){ return (test != compare) && (test != Category::None); };
 
 
 void setup()
@@ -66,12 +70,12 @@ void setup()
     EosComms::initialize(&SLIPSerial, &storage); 
 
     // start display
+    #ifndef STM32
     Wire.setSDA(DISPLAY_SDA);
     Wire.setSCL(DISPLAY_SCL);
     Wire.begin();
     display.begin();
-
-    
+    #endif
 
     // start encoder wheels
     #ifdef STM32
@@ -96,67 +100,45 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
 
+    // set our initial parameter indices so they're unset
     wheel1.setParameterIndex(-1);
     wheel2.setParameterIndex(-1);
     wheel3.setParameterIndex(-1);
     wheel4.setParameterIndex(-1);
 
     // start OSC connection
-    // this is blocking until it connects so it should be the last thing in setup()
     EosComms::begin();
-}
-
+};
 
 unsigned long blinkTimer; bool blinkState;
-unsigned long blinkTime = 1000; // 1Hz blink rate
 unsigned long displayTimer;
-unsigned long displayTime = 100; // 10Hz update rate
-unsigned long lastParamChangeTimer;
-unsigned long lastParamDebounceTime = 50; // 20Hz debounce rate
-uint16_t lastParamCount = 0;
-bool lastParamState;
-
 void loop()
 {
+    updateBlink();
+
     // keep connection to Eos updated
     EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
-    EosComms::update();
 
-    if(storage.getParamCount() != lastParamCount){
-        lastParamCount = storage.getParamCount();
-        lastParamChangeTimer = millis();
-        lastParamState = false;
-    }
-
-    if(!lastParamState && (millis() - lastParamChangeTimer >= lastParamDebounceTime)) {
-        lastParamState = true;
-
-        updateFromChannel();
-    }
-    
-    updateWheels();
-    updateParamButtons();
-
-    // if we're connected, keep blinking and updating our display
-    updateBlink();
+    // if we're connected, keep updating our inputs/outputs
     if(EosComms::isConnected()){
+        // update our inputs / various things
+        updateWheels();
+        updateParamButtons();
+        updateParamsFromChannel();
+
+        // only update our display on a limited rate to not bog the MCU down
         if(millis() - displayTimer > displayTime){
+            #ifndef STM32
             updateDisplay();
+            #endif
             displayTimer = millis();
         };
     }
-
-
-}
+    // if we disconnect, show our init display
+    else{
+        display.showDisplayInit();
+    }
+};
 
 void updateBlink()
 {
@@ -165,8 +147,9 @@ void updateBlink()
         blinkState = !blinkState;
         blinkTimer = millis();
     }
-}
+};
 
+// this should really be inlined into Display.h, but we'll deal with that when we re-write it to work with the i2c multiplexer
 void updateDisplay()
 {   
     display.clear();
@@ -185,73 +168,64 @@ void updateDisplay()
 
 void updateWheels()
 {
-    wheel1.update();
-    wheel2.update();
-    wheel3.update();
-    wheel4.update();
-
     // if our encoders have updates to send, then send them
-    if(wheel1.haveUpdate()){
-        EosComms::sendWheelData(&wheel1);
-    }
-    if(wheel2.haveUpdate()){
-        EosComms::sendWheelData(&wheel2);
-    }
-    if(wheel3.haveUpdate()){
-        EosComms::sendWheelData(&wheel3);
-    }
-    if(wheel4.haveUpdate()){
-        EosComms::sendWheelData(&wheel4);
-    }
+    if(wheel1.update()){ EosComms::sendWheelData(&wheel1); };
+    if(wheel2.update()){ EosComms::sendWheelData(&wheel2); };
+    if(wheel3.update()){ EosComms::sendWheelData(&wheel3); };
+    if(wheel4.update()){ EosComms::sendWheelData(&wheel4); };
 };
 
-bool categoryDiffAndNotNull(Category test, Category compare)
+unsigned long lastParamDebounceTimer;
+uint16_t lastParamCount = 0;
+bool lastParamState;
+/*
+    How do I explain this??
+
+    Due to the polling structure that we're kinda stuck with, this function exists.
+    Due to how we process the OSC inputs from eOS/how the output from eOS is sent,
+    we don't get all the parameters from a channel in one loop
+    
+    this function debounces the parameter count, 
+    and then updates the selected parameters that are assigned to each encoder when the parameters changed
+*/
+void updateParamsFromChannel()
 {
-    return (test != compare) && (test != Category::None);
-}
+    // if our param count changes, reset our timer and early exit
+    if(storage.getParamCount() != lastParamCount){
+        lastParamCount = storage.getParamCount();
+        lastParamDebounceTimer = millis();
+        lastParamState = false;
 
+        return;
+    }
 
-void updateFromChannel()
-{
-    Category param1 = storage.getParam(wheel1.getParameterIndex()).category;
-    Category param2 = storage.getParam(wheel2.getParameterIndex()).category;
-    Category param3 = storage.getParam(wheel3.getParameterIndex()).category;
-    Category param4 = storage.getParam(wheel4.getParameterIndex()).category;
-    if(categoryDiffAndNotNull(param1, currentCategory) || categoryDiffAndNotNull(param2, currentCategory) || categoryDiffAndNotNull(param3, currentCategory) || categoryDiffAndNotNull(param4, currentCategory)
-        || (param1 == None && param2 == None && param3 == None && param4 == None)
-        ){
+    // otherwise, if we debounce past our delay timer
+    if(!lastParamState && (millis() - lastParamDebounceTimer >= lastParamDebounceTime)) {
+        lastParamState = true;
 
-        // categoryReset = true;
-
-        // if((4*categoryPage) >= storage.getCategoryParamCount(currentCategory)){
-        //     categoryPage = 0;
-        // }
+        // reset to category page 0
         categoryPage = 0;
-
+        
+        // find our new indices
         wheel1.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+0));
         wheel2.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+1));
         wheel3.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+2));
         wheel4.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+3));
 
-
-        // if(param1 == Category::None && param2 == Category::None && param3 == Category::None && param4 == Category::None){
-        //     // categoryReset = false;
-        // }
+        return;
     }
-}
+};
 
 void updateParamButtons()
 {
     // check if any of our buttons are pressed
     Category newCategory = Category::None;
-    if(btnIntens.pressed()){newCategory = Category::Intensity;};
-    if(btnFocus.pressed()){newCategory = Category::Focus;};
-    if(btnColor.pressed()){newCategory = Category::Color;};
+    if(btnIntens.pressed()) {newCategory = Category::Intensity;};
+    if(btnFocus.pressed())  {newCategory = Category::Focus;};
+    if(btnColor.pressed())  {newCategory = Category::Color;};
     if(btnShutter.pressed()){newCategory = Category::Shutter;};
-    if(btnImage.pressed()){newCategory = Category::Image;};
-    if(btnForm.pressed()){newCategory = Category::Form;};
-
-    // if(newCategory == Category::None){return;} // do nothing
+    if(btnImage.pressed())  {newCategory = Category::Image;};
+    if(btnForm.pressed())   {newCategory = Category::Form;};
 
     if(newCategory == Category::None){return;} // do nothing
 
@@ -266,8 +240,6 @@ void updateParamButtons()
         return;
     }
 
-
-
     else if(newCategory == currentCategory){ // rotate our selection
         categoryPage++;
 
@@ -281,30 +253,4 @@ void updateParamButtons()
         wheel4.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+3));
         return;
     }
-
-
 };
-
-
-// void updateNextLastButtons()
-// {
-//     nextButtonState = nextDebouncer.update(!digitalRead(NEXT_BTN), millis());
-//     lastButtonState = lastDebouncer.update(!digitalRead(LAST_BTN), millis());
-
-//     // handle our next/last param button logic
-//     if(nextButtonState && !nextButtonPressed){
-//         nextButtonPressed = true;
-//         uint32_t currentIndex = wheel1.getParameterIndex();
-//         if(currentIndex < storage.getParamCount()-1){ currentIndex++; };
-//         wheel1.setParameterIndex(currentIndex);
-//     }
-//     if(!nextButtonState){ nextButtonPressed = false; };
-
-//     if(lastButtonState && !lastButtonPressed){
-//         lastButtonPressed = true;
-//         uint32_t currentIndex = wheel1.getParameterIndex();
-//         if(currentIndex > 0){ currentIndex--; };
-//         wheel1.setParameterIndex(currentIndex);
-//     }
-//     if(!lastButtonState){ lastButtonPressed = false; };
-// }

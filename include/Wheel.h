@@ -42,7 +42,7 @@ class Wheel
             _btn.begin();
         };
 
-        void update()
+        bool update()
         {
             // update our ticks
             _commandTicks = _encoder.read() /4;
@@ -53,16 +53,7 @@ class Wheel
                 else                         { _operationMode = Coarse; } 
             }
 
-            // bool debounceState = _debouncer.update(!digitalRead(buttonPin), millis());
-            // // edge detection if it's actually been pressed
-            // if(debounceState && !lastDebounceState){
-            //     // change the mode between coarse and fine
-            //     if(operationMode == Coarse) { operationMode = Fine; } 
-            //     else                        { operationMode = Coarse; }
-            // }
-
-            // // help with edge detection
-            // lastDebounceState = debounceState;
+            return abs(_commandTicks) > 0;
         };
 
         // includes count reset, should be used for OSC interactions

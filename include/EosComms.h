@@ -17,8 +17,8 @@
 const String HANDSHAKE_QUERY = "ETCOSC?"; 
 const String HANDSHAKE_REPLY = "OK";
 
-#define timeoutPingTime 10000 // 10 second
-#define timeoutDisconnectTime 30000 // 30 seconds
+#define timeoutPingTime 8000 // 8 second
+#define timeoutDisconnectTime 10000 // 10 seconds
 
 /*
     due to weirdness with namespaces we only declare the functions

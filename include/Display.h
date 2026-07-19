@@ -53,6 +53,7 @@ class Display
 
         void showDisplayInit()
         {
+            clear();
             _display.setTextSize(1);
             _display.setTextColor(SSD1306_WHITE);
             _display.cp437(true);
