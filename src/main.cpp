@@ -1,8 +1,13 @@
 #include <Arduino.h>
 #include <OSCBoards.h>
 #include <OSCMessage.h>
+
 #ifdef BOARD_HAS_USB_SERIAL
+#ifdef TEENSYDUINO
 #include <SLIPEncodedUSBSerial.h>
+#else
+#include <SLIPEncodedSerial.h>
+#endif
 SLIPEncodedUSBSerial SLIPSerial(thisBoardsSerialUSB);
 #else
 #include <SLIPEncodedSerial.h>
@@ -11,8 +16,8 @@ SLIPEncodedSerial SLIPSerial(Serial);
 
 #include "Wheel.h"
 #include "Display.h"
-#include "Parameter.h"
-#include "Debouncer.h"
+#include "Parameter.h"  
+#include "Button.h"
 #include "Pins.h"
 #include "EosComms.h"
 #include "DataStorage.h"
@@ -23,13 +28,20 @@ DataStorage storage;
 
 Display display(&Wire);
 
+
+#ifdef STM32
+Wheel wheel1(ENC1_SW);
+Wheel wheel2(ENC2_SW);
+Wheel wheel3(ENC3_SW);
+Wheel wheel4(ENC4_SW);
+#else
 Wheel wheel1(ENC1_A, ENC1_B, ENC1_SW);
 Wheel wheel2(ENC2_A, ENC2_B, ENC2_SW);
 Wheel wheel3(ENC3_A, ENC3_B, ENC3_SW);
 Wheel wheel4(ENC4_A, ENC4_B, ENC4_SW);
+#endif
 
-
-Category currentCategory = Category::None;
+Category currentCategory = Category::Intensity;
 uint categoryPage = 0;
 
 Button btnIntens(BTN_INTENS);
@@ -43,6 +55,7 @@ void updateBlink();
 void updateDisplay();
 void updateWheels();
 void updateParamButtons();
+bool categoryDiffAndNotNull(Category test, Category compare);
 
 
 void setup()
@@ -50,24 +63,27 @@ void setup()
     // this just gives the namespace a pointer to the actual SLIPserial object. 
     // we can't put it above with the other constructors bc it's function code.
     EosComms::initialize(&SLIPSerial, &storage); 
-    
-    // SerialUSB.begin(9600);
 
-    Serial1.begin(115200);
-
-    // start I2C for display
+    // start display
     Wire.setSDA(DISPLAY_SDA);
     Wire.setSCL(DISPLAY_SCL);
     Wire.begin();
-
-    // start display
     display.begin();
 
+    
+
     // start encoder wheels
+    #ifdef STM32
+    // wheel1.begin(&htim2);
+    // wheel2.begin(&htim3);
+    // wheel3.begin(&htim21);
+    // wheel4.begin(&htim22);
+    #else
     wheel1.begin();
     wheel2.begin();
     wheel3.begin();
     wheel4.begin();
+    #endif
 
     // start category buttons
     btnIntens.begin();
@@ -137,7 +153,6 @@ void updateDisplay()
     display.displayParam(storage.getParam(wheel4.getParameterIndex()));
 
     display.println(String(currentCategory));
-    // display.println(String(btnIntens.getState()) + " " + String(btnColor.getState()) + " " + String(btnFocus.getState()) + " " + String(btnImage.getState()) + " " + String(btnShutter.getState()) + " " + String(btnForm.getState()));
 
     display.show();
 };
@@ -164,26 +179,64 @@ void updateWheels()
     }
 };
 
+bool categoryDiffAndNotNull(Category test, Category compare)
+{
+    return (test != compare) && (test != Category::None);
+}
+
 void updateParamButtons()
 {
-    // update our debouncers
-    // btnIntens.update();
-    // btnFocus.update();
-    // btnColor.update();
-    // btnShutter.update();
-    // btnImage.update();
-    // btnForm.update();
+    
+    // bool categoryReset = false;
+
+    Category param1 = storage.getParam(wheel1.getParameterIndex()).category;
+    Category param2 = storage.getParam(wheel2.getParameterIndex()).category;
+    Category param3 = storage.getParam(wheel3.getParameterIndex()).category;
+    Category param4 = storage.getParam(wheel4.getParameterIndex()).category;
+    if(param1 != currentCategory || categoryDiffAndNotNull(param2, currentCategory) || categoryDiffAndNotNull(param3, currentCategory) || categoryDiffAndNotNull(param4, currentCategory)){
+        // categoryReset = true;
+
+        // if((4*categoryPage) >= storage.getCategoryParamCount(currentCategory)){
+        //     categoryPage = 0;
+        // }
+        categoryPage = 0;
+
+        wheel1.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+0));
+        wheel2.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+1));
+        wheel3.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+2));
+        wheel4.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+3));
+
+
+        // if(param1 == Category::None && param2 == Category::None && param3 == Category::None && param4 == Category::None){
+        //     // categoryReset = false;
+        // }
+    }
 
     // check if any of our buttons are pressed
     Category newCategory = Category::None;
-    if(btnIntens.update()){newCategory = Category::Intensity;};
-    if(btnFocus.update()){newCategory = Category::Focus;};
-    if(btnColor.update()){newCategory = Category::Color;};
-    if(btnShutter.update()){newCategory = Category::Shutter;};
-    if(btnImage.update()){newCategory = Category::Image;};
-    if(btnForm.update()){newCategory = Category::Form;};
+    if(btnIntens.pressed()){newCategory = Category::Intensity;};
+    if(btnFocus.pressed()){newCategory = Category::Focus;};
+    if(btnColor.pressed()){newCategory = Category::Color;};
+    if(btnShutter.pressed()){newCategory = Category::Shutter;};
+    if(btnImage.pressed()){newCategory = Category::Image;};
+    if(btnForm.pressed()){newCategory = Category::Form;};
+
+    // if(newCategory == Category::None){return;} // do nothing
 
     if(newCategory == Category::None){return;} // do nothing
+
+    else if(newCategory != currentCategory){ // switch category
+        currentCategory = newCategory;
+        categoryPage = 0;
+
+        wheel1.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+0));
+        wheel2.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+1));
+        wheel3.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+2));
+        wheel4.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+3));
+        return;
+    }
+
+
 
     else if(newCategory == currentCategory){ // rotate our selection
         categoryPage++;
@@ -199,15 +252,6 @@ void updateParamButtons()
         return;
     }
 
-    else if(newCategory != currentCategory){ // switch category
-        currentCategory = newCategory;
-        categoryPage = 0;
-
-        wheel1.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+0));
-        wheel2.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+1));
-        wheel3.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+2));
-        wheel4.setParameterIndex(storage.find(currentCategory, (categoryPage*4)+3));
-    }
 
 };
 

@@ -42,10 +42,10 @@ class Display
         {
             setTextSettings();
 
-            // _display.println(param.index);
+            _display.print(String(param.index) + " ");
             _display.print(param.name);
             _display.print("    ");
-            // _display.println(param.category);
+            _display.print(String(param.category) + " ");
             _display.println(param.value);
 
             // _display.display();
