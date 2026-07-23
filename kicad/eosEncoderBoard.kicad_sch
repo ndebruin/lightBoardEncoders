@@ -5293,6 +5293,18 @@
 		(uuid "5e18e86c-62df-48df-93ac-2990a7f39608")
 	)
 	(rectangle
+		(start 74.422 112.522)
+		(end 85.344 147.32)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "8bedfabe-7710-40a5-bf2e-92d96ede3eae")
+	)
+	(rectangle
 		(start 145.415 48.895)
 		(end 207.01 73.66)
 		(stroke
@@ -5479,6 +5491,16 @@
 			(justify left)
 		)
 		(uuid "b0b7285e-f008-454b-8444-f593b181d88d")
+	)
+	(text "LED"
+		(exclude_from_sim no)
+		(at 76.2 113.792 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "db02f916-4da8-4b60-bf87-93240d851382")
 	)
 	(text "16MHz\nClock\n"
 		(exclude_from_sim no)
@@ -5761,12 +5783,6 @@
 		(uuid "9e9936cc-0109-41ec-8f6c-3c4a80e9e90d")
 	)
 	(junction
-		(at 127 135.89)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a8a88b70-bc54-454f-b352-8578bc3f12d5")
-	)
-	(junction
 		(at 220.98 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5869,10 +5885,6 @@
 	(no_connect
 		(at 215.9 100.33)
 		(uuid "23c57ad6-0b1d-4653-8e82-f472e5526f15")
-	)
-	(no_connect
-		(at 95.25 63.5)
-		(uuid "26511c3a-0cb1-491b-9d03-0fd9e8fe4834")
 	)
 	(no_connect
 		(at 95.25 43.18)
@@ -6276,6 +6288,16 @@
 	)
 	(wire
 		(pts
+			(xy 82.55 134.62) (xy 82.55 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1968dad7-67e1-43ee-9937-0fee4ac1c3ac")
+	)
+	(wire
+		(pts
 			(xy 93.98 88.9) (xy 95.25 88.9)
 		)
 		(stroke
@@ -6463,26 +6485,6 @@
 			(type default)
 		)
 		(uuid "29ff75f8-0307-486e-a2ee-def7567b8330")
-	)
-	(wire
-		(pts
-			(xy 127 135.89) (xy 128.27 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2aca07b5-9525-43f0-85f6-a53a3ff7f7ba")
-	)
-	(wire
-		(pts
-			(xy 134.62 129.54) (xy 134.62 130.81)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2bfdb99a-ae3a-4fc8-8ca1-8b9eb045629e")
 	)
 	(wire
 		(pts
@@ -6736,6 +6738,16 @@
 	)
 	(wire
 		(pts
+			(xy 82.55 140.97) (xy 82.55 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e263cb0-e4f6-4fb9-b9e1-854f2c1b044d")
+	)
+	(wire
+		(pts
 			(xy 127 120.65) (xy 127 121.92)
 		)
 		(stroke
@@ -6843,6 +6855,16 @@
 			(type default)
 		)
 		(uuid "49d6f1b9-5383-4b5a-895e-389b9c785009")
+	)
+	(wire
+		(pts
+			(xy 82.55 119.38) (xy 82.55 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49e4e18c-4450-43f6-8fc7-7c1af27cee74")
 	)
 	(wire
 		(pts
@@ -7666,16 +7688,6 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 135.89) (xy 134.62 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "932d0406-439f-4c55-800e-c53b76cec50a")
-	)
-	(wire
-		(pts
 			(xy 220.98 66.04) (xy 220.98 67.31)
 		)
 		(stroke
@@ -8496,6 +8508,16 @@
 	)
 	(wire
 		(pts
+			(xy 82.55 128.27) (xy 82.55 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0cb804f-517c-4ecb-a913-57c489cabb65")
+	)
+	(wire
+		(pts
 			(xy 148.59 54.61) (xy 148.59 52.07)
 		)
 		(stroke
@@ -8613,16 +8635,6 @@
 			(type default)
 		)
 		(uuid "ea1b5439-092f-4a46-a713-191dc88f83dc")
-	)
-	(wire
-		(pts
-			(xy 127 121.92) (xy 134.62 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "eb172723-0fdd-474c-972e-fb4cf9cc2c4b")
 	)
 	(wire
 		(pts
@@ -8813,6 +8825,16 @@
 			(type default)
 		)
 		(uuid "f857b0eb-0589-4362-a44c-8cae14dea459")
+	)
+	(wire
+		(pts
+			(xy 93.98 63.5) (xy 95.25 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8880784-b245-4fe6-af4c-3a5db8a7c39b")
 	)
 	(wire
 		(pts
@@ -10182,6 +10204,30 @@
 			)
 		)
 	)
+	(global_label "LED"
+		(shape input)
+		(at 82.55 119.38 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8a0aff80-8a6e-482b-bf59-5565c88ef9de")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 82.55 112.9477 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "SDA3"
 		(shape input)
 		(at 231.14 107.95 0)
@@ -11070,6 +11116,30 @@
 			)
 		)
 	)
+	(global_label "LED"
+		(shape input)
+		(at 93.98 63.5 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f7f80e57-a679-4278-af1d-8f53722e0925")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 87.5477 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
 	(global_label "~{RST}"
 		(shape input)
 		(at 93.98 30.48 180)
@@ -11925,88 +11995,6 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "C4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small")
-		(at 134.62 133.35 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "140ce2ab-923e-43e1-b130-43f1ffb6842f")
-		(property "Reference" "R31"
-			(at 137.16 132.0799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "150"
-			(at 137.16 134.6199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 134.62 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small symbol"
-			(at 134.62 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f091c3a2-a11d-4499-be92-12c0f7ddb8f3")
-		)
-		(pin "2"
-			(uuid "d3b164a4-c3ba-411e-991b-49b854642bf8")
-		)
-		(instances
-			(project "eosEncoderBoard"
-				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
-					(reference "R31")
 					(unit 1)
 				)
 			)
@@ -13079,6 +13067,89 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 82.55 132.08 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "31276b60-eecd-4763-bb9e-d9f1a9f9013d")
+		(property "Reference" "R31"
+			(at 80.01 130.8099 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "150"
+			(at 80.01 133.3499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 82.55 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 82.55 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "aead67d3-51c8-4dcc-a9cd-2d99b56420a5")
+		)
+		(pin "2"
+			(uuid "9a7474e6-2878-4473-8bd6-4da81af040b5")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "R31")
 					(unit 1)
 				)
 			)
@@ -15754,6 +15825,100 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:LED")
+		(at 82.55 124.46 270)
+		(mirror x)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "68ad13fb-37e5-416c-9d68-5159bc3c4069")
+		(property "Reference" "D7"
+			(at 78.74 124.7774 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "LED"
+			(at 78.74 127.3174 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+			(at 82.55 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Light emitting diode"
+			(at 82.55 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 82.55 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "9180c962-702f-418b-977b-2b92b040b6f4")
+		)
+		(pin "1"
+			(uuid "e30896d8-6b66-4e46-b2e4-c0e992ab88f7")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "D7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Switch:SW_Push")
 		(at 198.12 25.4 0)
 		(unit 1)
@@ -16083,99 +16248,6 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "R12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:LED")
-		(at 134.62 125.73 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "72a26fa7-9dba-4a08-a982-bb59d6149444")
-		(property "Reference" "D7"
-			(at 138.43 126.0474 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "LED"
-			(at 138.43 128.5874 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
-			(at 134.62 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Light emitting diode"
-			(at 134.62 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" "1=K 2=A"
-			(at 134.62 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "beb7234e-bf13-40c6-8938-97f1ed474b99")
-		)
-		(pin "1"
-			(uuid "2f77f664-5751-47c6-9291-a673e2f7f273")
-		)
-		(instances
-			(project "eosEncoderBoard"
-				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
-					(reference "D7")
 					(unit 1)
 				)
 			)
@@ -17129,6 +17201,83 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 82.55 142.24 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "84d1945a-e4f3-49c9-9d1f-e48fa6a67c97")
+		(property "Reference" "#PWR044"
+			(at 82.55 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 82.55 145.796 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 82.55 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 82.55 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b497798c-6d53-412a-a413-661fdbf5a31d")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -18103,86 +18252,6 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small")
-		(at 130.81 135.89 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "aab7db99-248e-4699-85dd-d6e32c04fcef")
-		(property "Reference" "R32"
-			(at 130.81 130.81 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-			)
-		)
-		(property "Value" "150"
-			(at 130.81 133.35 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 130.81 135.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 130.81 135.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small symbol"
-			(at 130.81 135.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0070b1ba-f5ca-452a-95da-3064519d1213")
-		)
-		(pin "2"
-			(uuid "a7cfb7d9-f17d-4410-bc14-530ee91d3855")
-		)
-		(instances
-			(project "eosEncoderBoard"
-				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
-					(reference "R32")
 					(unit 1)
 				)
 			)
@@ -19787,6 +19856,89 @@
 			(project "eosEncoderBoard"
 				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
 					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 82.55 138.43 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d8f1f386-0ea2-4424-94bd-1383d2a77b67")
+		(property "Reference" "R32"
+			(at 80.01 137.1599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "150"
+			(at 80.01 139.6999 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 82.55 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 82.55 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8031b20-aeeb-4e2e-90ee-ea337b0da36b")
+		)
+		(pin "2"
+			(uuid "03f21ee0-7e92-4ecf-a717-aa15e688afc2")
+		)
+		(instances
+			(project "eosEncoderBoard"
+				(path "/6ef2dae1-de06-46ad-9fe9-9d976ada959b"
+					(reference "R32")
 					(unit 1)
 				)
 			)
